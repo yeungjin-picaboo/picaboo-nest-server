@@ -22,7 +22,7 @@ export class AuthController {
     return this.authService.signUp(createUserDto);
   }
 
-  @Post('/sighin')
+  @Post('/signin')
   signIn(@Body() data: AuthDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.signIn(data, res);
   }
