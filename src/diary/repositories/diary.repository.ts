@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { find, identity } from 'rxjs';
 import { CustomRepository } from 'src/common/custom-repository.decorator';
@@ -44,9 +44,9 @@ export class DiarysRepository {
     }
   }
 
-  async deleteDiary(id: number) {
+  async deleteDiary(diaryId: number) {
     try {
-      await this.diaryRepository.delete({ id });
+      await this.diaryRepository.delete({ id: diaryId });
       return true;
     } catch (error) {
       console.error(error);

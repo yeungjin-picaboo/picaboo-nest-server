@@ -42,11 +42,24 @@ export class DiarysService {
     }
   }
 
-  // async deleteDiary(id:number, user):Promise<DeleteDiaryDto>{
-  //   try {
-  //     const diary = await this.deleteDiary.
-  //   } catch (error) {
-
-  //   }
-  // }
+  async deleteDiary(diaryId: number): Promise<DeleteDiaryDto> {
+    try {
+      const result = await this.diaryRepository.deleteDiary(diaryId);
+      if (!result) {
+        return {
+          ok: false,
+          error: 'Failed to delete diary. Diary not found',
+        };
+      }
+      return {
+        ok: true,
+        message: 'Diary successfully deleted',
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error.message,
+      };
+    }
+  }
 }

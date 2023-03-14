@@ -7,13 +7,12 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  RelationId,
 } from 'typeorm';
 
 @Entity()
 export class Diary extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; //diaryId
 
   @Column()
   @IsString()
