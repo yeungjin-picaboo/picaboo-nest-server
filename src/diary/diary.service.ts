@@ -21,32 +21,42 @@ export class DiarysService {
   // return found;
   // }
 
-  async createDiary(
-    createDiaryDto: CreateDiaryDto,
-    req: Request,
-  ): Promise<CreateDiaryOutput> {
+  async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<CreateDiaryOutput> {
     try {
       await this.diaryRepository.createDiary({
         ...createDiaryDto,
-        userId: req.user['userId'],
+        userId: req.user['userId']
       });
       console.log('Created Diary');
       return {
-        ok: true,
+        ok: true
       };
     } catch (error) {
       console.error('Failed');
       return {
-        ok: false,
+        ok: false
       };
     }
   }
 
-  // async deleteDiary(id:number, user):Promise<DeleteDiaryDto>{
-  //   try {
-  //     const diary = await this.deleteDiary.
-  //   } catch (error) {
-
-  //   }
-  // }
+  async deleteDiary(diaryId: number, req: Request): Promise<DeleteDiaryDto> {
+    try {
+      const result = await this.diaryRepository.deleteDiary(diaryId);
+      if (!result) {
+        return {
+          ok: false,
+          error: 'Failed to delete diary. Diary not found'
+        };
+      }
+      return {
+        ok: true,
+        message: 'Diary successfully deleted'
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error.message
+      };
+    }
+  }
 }

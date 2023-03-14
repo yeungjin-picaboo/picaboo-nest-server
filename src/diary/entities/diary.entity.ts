@@ -6,13 +6,17 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+<<<<<<< HEAD
   PrimaryGeneratedColumn
+=======
+  PrimaryGeneratedColumn,
+>>>>>>> main
 } from 'typeorm';
 
 @Entity()
 export class Diary extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; //diaryId
 
   @Column()
   @IsString()

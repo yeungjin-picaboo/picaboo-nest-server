@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -33,5 +34,13 @@ export class DiarysController {
   @UsePipes(ValidationPipe)
   createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
     return this.diaryService.createDiary(createDiaryDto, req);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Delete('/:id')
+  async deleteDiary(@Param('id') id: number, @Req() req: Request) {
+    console.log(req.user);
+
+    return this.diaryService.deleteDiary(id);
   }
 }
