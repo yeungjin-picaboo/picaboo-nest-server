@@ -36,7 +36,9 @@ export class DiarysController {
 
   @UseGuards(AccessTokenGuard)
   @Delete('/:id')
-  deleteDiary(@Param('id') id: number) {
+  async deleteDiary(@Param('id') id: number, @Req() req: Request) {
+    console.log(req.user);
+
     return this.diaryService.deleteDiary(id);
   }
 }
