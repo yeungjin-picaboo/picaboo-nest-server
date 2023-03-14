@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 
 @Entity()
@@ -37,6 +37,6 @@ export class Diary extends BaseEntity {
   updatedAt: Date;
 
   //관계
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, user => user.id)
   user: User;
 }
