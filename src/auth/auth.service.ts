@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
@@ -16,25 +16,29 @@ export class AuthService {
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<any> {
-    const userExists = await this.userRespository.existsUser(
-      createUserDto.email,
-    );
-    if (userExists) {
-      throw new BadRequestException('This user already exists');
+    try {
+      const userExists = await this.userRespository.existsUser(
+        createUserDto.email,
+      );
+      if (userExists) {
+        throw new BadRequestException('This email already exists');
+      }
+
+      const nicknameExists = await this.userRespository.existsNickname(
+        createUserDto.nickname,
+      );
+      if (nicknameExists) {
+        throw new BadRequestException('This nickname already exists');
+      }
+
+      const hash = await bcrypt.hash(createUserDto.password, 10);
+      const { email, nickname } = createUserDto;
+
+      await this.userRespository.createUser(email, hash, nickname);
+      return { message: 'Success Create user!' };
+    } catch (error) {
+      throw new BadRequestException('Error Signup');
     }
-
-    const nicknameExists = await this.userRespository.existsNickname(
-      createUserDto.nickname,
-    );
-    if (nicknameExists) {
-      throw new BadRequestException('This nickname already exists');
-    }
-
-    const hash = await bcrypt.hash(createUserDto.password, 10);
-    const { email, nickname } = createUserDto;
-
-    await this.userRespository.createUser(email, hash, nickname);
-    return { message: 'Success Create user!' };
   }
 
   async signIn(data: AuthDto, res: Response): Promise<any> {
@@ -46,7 +50,7 @@ export class AuthService {
 
       if (!passwordCheck) throw new BadRequestException('Check your password.');
       const tokens = await this.getTokens({
-        sub: user.id,
+        userId: user.id,
       });
       res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });
       return { accessToken: tokens.accessToken };
@@ -56,7 +60,7 @@ export class AuthService {
     }
   }
 
-  async getTokens(payload: { sub: number }) {
+  async getTokens(payload: { userId: number }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         expiresIn: 60 * 15,

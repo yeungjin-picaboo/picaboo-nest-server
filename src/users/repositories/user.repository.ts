@@ -17,6 +17,8 @@ export class UserRespository {
       const exists = await this.userRespository.findOneBy({ email });
       return exists;
     } catch (error) {
+      console.error(error);
+
       throw new BadRequestException('Exists User');
     }
   }
@@ -26,6 +28,7 @@ export class UserRespository {
       const exists = await this.userRespository.findOneBy({ nickname });
       return exists;
     } catch (error) {
+      console.error(error);
       throw new BadRequestException('Exists Nickname');
     }
   }
@@ -35,8 +38,10 @@ export class UserRespository {
       const user = await this.userRespository.save(
         this.userRespository.create({ email, password, nickname }),
       );
+      console.log(user);
       return user;
     } catch (error) {
+      console.error(error);
       throw new BadRequestException('Create User error');
     }
   }

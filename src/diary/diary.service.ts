@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
 import { CreateDiaryDto, CreateDiaryOutput } from './dtos/create-diary.dto';
 import { DeleteDiaryDto } from './dtos/delete-diary.dto';
 import { DiarysRepository } from './repositories/diary.repository';
@@ -8,7 +9,7 @@ import { DiarysRepository } from './repositories/diary.repository';
 export class DiarysService {
   constructor(private readonly diaryRepository: DiarysRepository) {}
 
-  getAllDiary() {}
+  // getAllDiary() {}
 
   // async getDiary(id: number): Promise<Diary> {
   // const found = await this.diaryRepository.findOne(id);
@@ -22,15 +23,13 @@ export class DiarysService {
 
   async createDiary(
     createDiaryDto: CreateDiaryDto,
-    user,
+    req: Request,
   ): Promise<CreateDiaryOutput> {
     try {
-      await this.diaryRepository.createDiary(
-        {
-          ...createDiaryDto,
-        },
-        user,
-      );
+      await this.diaryRepository.createDiary({
+        ...createDiaryDto,
+        userId: req.user['userId'],
+      });
       console.log('Created Diary');
       return {
         ok: true,

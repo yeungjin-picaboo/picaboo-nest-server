@@ -40,6 +40,4 @@ export class Diary extends BaseEntity {
   //관계
   @ManyToOne(() => User, (user) => user.id)
   user: User;
-  @RelationId((diary: Diary) => diary.user)
-  userId: User;
 }

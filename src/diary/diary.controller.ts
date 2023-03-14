@@ -30,6 +30,6 @@ export class DiarysController {
   @Post('')
   @UsePipes(ValidationPipe)
   createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
-    return this.diaryService.createDiary(createDiaryDto, req.user);
+    return this.diaryService.createDiary(createDiaryDto, req);
   }
 }

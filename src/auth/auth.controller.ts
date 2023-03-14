@@ -30,6 +30,6 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Get()
   user(@Req() req: Request) {
-    return req.user;
+    return req.user; //useGuards
   }
 }
