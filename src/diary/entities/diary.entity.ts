@@ -6,11 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-<<<<<<< HEAD
-  PrimaryGeneratedColumn
-=======
   PrimaryGeneratedColumn,
->>>>>>> main
 } from 'typeorm';
 
 @Entity()
