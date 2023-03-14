@@ -11,17 +11,14 @@ import { User } from './users/entities/user.entity';
 import { PictureModule } from './picture/picture.module';
 import { GoogleUserModule } from './google_user/google_user.module';
 import { WeatherModule } from './weather/weather.module';
+import { GoogleUser } from './google_user/entities/google_user.entity';
+import { join } from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    AuthModule,
-    UsersModule,
-    DiarysModule,
-    GoogleUserModule,
-    WeatherModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -29,10 +26,16 @@ import { WeatherModule } from './weather/weather.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Diary],
+      entities: [User, Diary, GoogleUser],
+      // "entities: [__dirname + '/**/*.entity{.ts,.js}'],"
       synchronize: true
       // logging: true,
     }),
+    AuthModule,
+    UsersModule,
+    DiarysModule,
+    GoogleUserModule,
+    WeatherModule,
     PictureModule
   ],
   controllers: [],
