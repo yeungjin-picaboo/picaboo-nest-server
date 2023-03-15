@@ -13,6 +13,7 @@ import { GoogleUserModule } from './google_user/google_user.module';
 import { WeatherModule } from './weather/weather.module';
 import { GoogleUser } from './google_user/entities/google_user.entity';
 import { EmtotionModule } from './emotion/emotion.module';
+import { createPicture } from './picture/entities/create_picture.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { EmtotionModule } from './emotion/emotion.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Diary, GoogleUser],
+      entities: [User, Diary, GoogleUser, createPicture],
       // "entities: [__dirname + '/**/*.entity{.ts,.js}'],"
       synchronize: true
       // logging: true,
