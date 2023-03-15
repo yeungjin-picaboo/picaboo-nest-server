@@ -175,3 +175,5 @@ dist
 .env.dev
 
 create_picture.sh
+
+*.png
