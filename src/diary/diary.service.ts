@@ -39,10 +39,9 @@ export class DiarysService {
     }
   }
 
-
-  async deleteDiary(diaryId: number): Promise<DeleteDiaryDto> {
+  async deleteDiary(diaryId: number, userId: number): Promise<DeleteDiaryDto> {
     try {
-      const result = await this.diaryRepository.deleteDiary(diaryId);
+      const result = await this.diaryRepository.deleteDiary({ diaryId, userId });
       if (!result) {
         return {
           ok: false,

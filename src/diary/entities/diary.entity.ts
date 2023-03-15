@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 
 @Entity()
@@ -14,21 +14,33 @@ export class Diary extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number; //diaryId
 
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   title: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   content: string;
 
-  @Column()
-  @IsNumber()
-  year: number;
+  // @Column()
+  // @IsNumber()
+  // year: number;
 
-  @Column()
-  @IsNumber()
-  month: string;
+  // @Column()
+  // @IsNumber()
+  // month: string;
+
+  @Column({ nullable: true })
+  @IsString()
+  weather: string;
+
+  @Column({ nullable: true })
+  @IsString()
+  emotion: string;
+
+  @Column({ nullable: true })
+  @IsString()
+  source: string;
 
   @CreateDateColumn({ name: 'created_at', comment: '생성일' })
   createdAt: Date;
