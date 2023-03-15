@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { find, identity } from 'rxjs';
 import { CustomRepository } from 'src/common/custom-repository.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { UserRespository } from 'src/users/repositories/user.repository';
 import { Repository } from 'typeorm';
+import { DeleteDiaryDto } from '../dtos/delete-diary.dto';
 import { Diary } from '../entities/diary.entity';
 
 @Injectable()
@@ -26,14 +27,14 @@ export class DiarysRepository {
 
   async createDiary({ title, content, year, month, userId }) {
     try {
-      const findUser = await this.userRepository.findOneBy({ id: userId });
+      const user = await this.userRepository.findOneBy({ id: userId });
       const diary = await this.diaryRepository.save(
         this.diaryRepository.create({
           title,
           content,
           year,
           month,
-          user: findUser,
+          user,
         }),
       );
       console.log(diary);
@@ -44,10 +45,12 @@ export class DiarysRepository {
     }
   }
 
-  async deleteDiary(id: number) {
+  async deleteDiary({ diaryId, userId }) {
     try {
-      await this.diaryRepository.delete({ id });
-      return true;
+      const user = await this.userRepository.findOneBy({ id: userId });
+      const deleteDiary = await this.diaryRepository.delete({ id: diaryId });
+
+      return deleteDiary;
     } catch (error) {
       console.error(error);
       return false;
