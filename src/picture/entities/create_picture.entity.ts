@@ -1,29 +1,32 @@
 import {
-	BaseEntity,
-	Column,
-	CreateDateColumn,
-	Entity,
-	PrimaryGeneratedColumn,
-	UpdateDateColumn,
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
 } from 'typeorm';
 
 @Entity()
 export class create_picture extends BaseEntity {
-	@PrimaryGeneratedColumn()
-	id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-	@Column()
-	title: string;
+  @Column()
+  title: string;
 
-	@Column()
-	user_email: string;
+  @Column()
+  user_email: string;
 
-	@Column()
-	user_name: string;
+  @Column()
+  user_name: string;
 
-	@CreateDateColumn()
-	createdAt: Date;
+  @Column({ nullable: false })
+  picture_url: string;
 
-	@UpdateDateColumn()
-	updatedAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
