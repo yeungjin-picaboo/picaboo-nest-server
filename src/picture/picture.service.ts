@@ -22,7 +22,7 @@ export class PictureService extends Repository<create_picture> {
     const lastFile = lastDir[lastDir.length - 1];
 
     const picture_url = `${process.env.PUBLIC_LINK}${user_name}` + lastFile;
-
+    
     console.log(__dirname + `${user_name}`);
     console.log(process.env.DB_USERNAME);
     const create_picture = this.create({
