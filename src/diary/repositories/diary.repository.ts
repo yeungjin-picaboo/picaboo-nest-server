@@ -25,25 +25,25 @@ export class DiarysRepository {
     }
   }
 
-  async createDiary({ title, content, year, month, userId }) {
-    try {
-      const user = await this.userRepository.findOneBy({ id: userId });
-      const diary = await this.diaryRepository.save(
-        this.diaryRepository.create({
-          title,
-          content,
-          year,
-          month,
-          user,
-        }),
-      );
-      console.log(diary);
-      return diary;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  }
+  // async createDiary({ title, content, year, month, userId }) {
+  //   try {
+  //     const user = await this.userRepository.findOneBy({ id: userId });
+  //     const diary = await this.diaryRepository.save(
+  //       this.diaryRepository.create({
+  //         title,
+  //         content,
+  //         year,
+  //         month,
+  //         user,
+  //       }),
+  //     );
+  //     console.log(diary);
+  //     return diary;
+  //   } catch (error) {
+  //     console.error(error);
+  //     return false;
+  //   }
+  // }
 
   async deleteDiary({ diaryId, userId }) {
     try {
