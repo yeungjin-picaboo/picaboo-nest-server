@@ -8,7 +8,7 @@ import {
   Req,
   UseGuards,
   UsePipes,
-  ValidationPipe,
+  ValidationPipe
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
@@ -38,9 +38,9 @@ export class DiarysController {
 
   @UseGuards(AccessTokenGuard)
   @Delete('/:id')
-  async deleteDiary(@Param('id') id: number, @Req() req: Request) {
+  async deleteDiary(@Param('id') id: number, @Param('userId') userId: number, @Req() req: Request) {
     console.log(req.user);
 
-    return this.diaryService.deleteDiary(id);
+    return this.diaryService.deleteDiary(id, userId);
   }
 }

@@ -15,7 +15,7 @@ export class DiarysRepository {
     @InjectRepository(Diary)
     private readonly diaryRepository: Repository<Diary>,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: Repository<User>
   ) {}
   async getAllDiary(page) {
     try {
@@ -31,11 +31,8 @@ export class DiarysRepository {
       const diary = await this.diaryRepository.save(
         this.diaryRepository.create({
           title,
-          content,
-          year,
-          month,
-          user,
-        }),
+          content
+        })
       );
       console.log(diary);
       return diary;
