@@ -14,6 +14,7 @@ import { WeatherModule } from './weather/weather.module';
 import { GoogleUser } from './google_user/entities/google_user.entity';
 import { EmtotionModule } from './emotion/emotion.module';
 import { createPicture } from './picture/entities/create_picture.entity';
+import { DomainModuleModule } from './domain-module/domain-module.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { createPicture } from './picture/entities/create_picture.entity';
     GoogleUserModule,
     WeatherModule,
     PictureModule,
-    EmtotionModule
+    EmtotionModule,
+    DomainModuleModule
   ],
   controllers: [],
   providers: []
