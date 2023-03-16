@@ -6,6 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UserRespository } from 'src/users/repositories/user.repository';
 import { Repository } from 'typeorm';
 import { DeleteDiaryDto } from '../dtos/delete-diary.dto';
+import { UpdateDiaryDto } from '../dtos/update-diary.dto';
 import { Diary } from '../entities/diary.entity';
 
 @Injectable()
@@ -15,7 +16,7 @@ export class DiarysRepository {
     @InjectRepository(Diary)
     private readonly diaryRepository: Repository<Diary>,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userRepository: Repository<User>
   ) {}
   async getAllDiary(page) {
     try {
@@ -34,8 +35,8 @@ export class DiarysRepository {
           content,
           year,
           month,
-          user,
-        }),
+          user
+        })
       );
       console.log(diary);
       return diary;
@@ -45,15 +46,31 @@ export class DiarysRepository {
     }
   }
 
-  async deleteDiary({ diaryId, userId }) {
+  async updateDiary(diaryId, updateDiaryDto: UpdateDiaryDto, userId) {
     try {
-      const user = await this.userRepository.findOneBy({ id: userId });
-      const deleteDiary = await this.diaryRepository.delete({ id: diaryId });
+      console.log({ id: diaryId, user: { id: userId } });
+      const diary = await this.diaryRepository.findOneBy({ id: diaryId, user: { id: userId } });
+      console.log(diary, '111');
 
-      return deleteDiary;
+      if (!diary) {
+        console.log(diary, '222');
+        return false;
+      }
+      console.log(diary, '333');
+      return this.diaryRepository.save({
+        id: diaryId,
+        ...updateDiaryDto
+      });
     } catch (error) {
-      console.error(error);
+      return error;
+    }
+  }
+
+  async deleteDiary({ diaryId, userId }) {
+    const deleteDiary = await this.diaryRepository.delete({ id: diaryId, user: { id: userId } });
+    if (deleteDiary.affected === 0) {
       return false;
     }
+    return deleteDiary;
   }
 }

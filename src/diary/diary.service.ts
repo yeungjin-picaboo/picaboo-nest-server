@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
+import { DeleteResult } from 'typeorm';
 import { CreateDiaryDto, CreateDiaryOutput } from './dtos/create-diary.dto';
 import { DeleteDiaryDto } from './dtos/delete-diary.dto';
+import { UpdateDiaryDto, UpdateDiaryOutput } from './dtos/update-diary.dto';
 import { DiarysRepository } from './repositories/diary.repository';
 
 @Injectable()
@@ -39,9 +41,9 @@ export class DiarysService {
     }
   }
 
-  async deleteDiary(diaryId: number): Promise<DeleteDiaryDto> {
+  async deleteDiary(diaryId, userId): Promise<DeleteDiaryDto> {
     try {
-      const result = await this.diaryRepository.deleteDiary(diaryId);
+      const result = await this.diaryRepository.deleteDiary({ diaryId, userId });
       if (!result) {
         return {
           ok: false,
@@ -51,6 +53,29 @@ export class DiarysService {
       return {
         ok: true,
         message: 'Diary successfully deleted'
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error.message
+      };
+    }
+  }
+
+  async updateDiary(diaryId, userId, updateDiaryDto: UpdateDiaryDto): Promise<UpdateDiaryOutput> {
+    try {
+      const update = await this.diaryRepository.updateDiary(diaryId, updateDiaryDto, userId);
+      console.log(update, '444');
+
+      if (!update) {
+        return {
+          ok: false,
+          error: 'Failed to update diary'
+        };
+      }
+      return {
+        ok: true,
+        message: 'Diary successfully updated'
       };
     } catch (error) {
       return {
