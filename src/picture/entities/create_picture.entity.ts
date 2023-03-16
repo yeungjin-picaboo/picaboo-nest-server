@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class create_picture extends BaseEntity {
+export class createPicture extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
