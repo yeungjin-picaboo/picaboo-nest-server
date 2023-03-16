@@ -5,10 +5,12 @@ import { Diary } from '../entities/diary.entity';
 
 export class CreateDiaryDto extends PickType(Diary, ['title', 'content']) {} // 일기 생성 DB
 
-export class CreateMoodDto extends PickType(Diary, ['emotion']) {}
+export class BodyEmotionDto extends PickType(Diary, ['content', 'title']) {}
 
-export class CreateWeatherDto extends PickType(Diary, ['weather']) {}
+export class CreateWeatherDto extends PickType(Diary, ['content', 'weather']) {}
 
-export class CreateSourceDto extends PickType(Diary, ['source']) {}
+export class CreateSourceDto extends PickType(Diary, ['title', 'source']) {}
+
+export class UpdateWeatherDto extends PickType(Diary, ['id']) {}
 
 export class CreateDiaryOutput extends CoreOutput {}
