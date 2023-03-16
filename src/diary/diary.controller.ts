@@ -33,7 +33,7 @@ export class DiarysController {
   @Post('')
   @UsePipes(ValidationPipe)
   createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
-    return this.diaryService.createDiary(createDiaryDto, req);
+    // return this.diaryService.createDiary(createDiaryDto, req);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -42,5 +42,6 @@ export class DiarysController {
     console.log(req.user);
 
     return this.diaryService.deleteDiary(id, userId);
+    // return this.diaryService.deleteDiary(id);
   }
 }

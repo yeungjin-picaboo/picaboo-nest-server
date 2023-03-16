@@ -22,14 +22,6 @@ export class Diary extends BaseEntity {
   @IsString()
   content: string;
 
-  // @Column()
-  // @IsNumber()
-  // year: number;
-
-  // @Column()
-  // @IsNumber()
-  // month: string;
-
   @Column({ nullable: true })
   @IsString()
   weather: string;

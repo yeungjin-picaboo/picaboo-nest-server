@@ -21,26 +21,23 @@ export class DiarysService {
   // return found;
   // }
 
-  async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<CreateDiaryOutput> {
-    // try {
-    //   await this.diaryRepository.createDiary({
-    //     ...createDiaryDto,
-    //     userId: req.user['userId']
-    //   });
-    //   console.log('Created Diary');
-    //   return {
-    //     ok: true
-    //   };
-    // } catch (error) {
-    //   console.error('Failed');
-    //   return {
-    //     ok: false
-    //   };
-    // }
-    return {
-      ok: true
-    };
-  }
+  // async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<CreateDiaryOutput> {
+  //   try {
+  //     await this.diaryRepository.createDiary({
+  //       ...createDiaryDto,
+  //       userId: req.user['userId']
+  //     });
+  //     console.log('Created Diary');
+  //     return {
+  //       ok: true
+  //     };
+  //   } catch (error) {
+  //     console.error('Failed');
+  //     return {
+  //       ok: false
+  //     };
+  //   }
+  // }
 
   async deleteDiary(diaryId: number, userId: number): Promise<DeleteDiaryDto> {
     try {

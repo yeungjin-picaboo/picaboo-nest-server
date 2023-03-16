@@ -22,6 +22,7 @@ export class PictureService extends Repository<createPicture> {
 
     const picture_url = `${process.env.PUBLIC_LINK}${user_name}` + lastFile;
    //  console.log('a = ', a.toString('utf-8'));
+    
     console.log(__dirname + `${user_name}`);
     console.log(process.env.DB_USERNAME);
     const create_picture = this.create({

@@ -7,4 +7,8 @@ export class CreateDiaryDto extends PickType(Diary, ['title', 'content']) {} // 
 
 export class CreateMoodDto extends PickType(Diary, ['emotion']) {}
 
+export class CreateWeatherDto extends PickType(Diary, ['weather']) {}
+
+export class CreateSourceDto extends PickType(Diary, ['source']) {}
+
 export class CreateDiaryOutput extends CoreOutput {}
