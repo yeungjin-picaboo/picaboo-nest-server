@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -6,7 +7,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 
 @Entity()
@@ -15,25 +16,31 @@ export class Diary extends BaseEntity {
   id: number; //diaryId
 
   @Column()
+  @ApiProperty({ description: 'Title' })
   @IsString()
   title: string;
 
   @Column()
+  @ApiProperty({ description: 'Content' })
   @IsString()
   content: string;
 
   @Column()
+  @ApiProperty({ description: 'Year' })
   @IsNumber()
   year: number;
 
   @Column()
+  @ApiProperty({ description: 'Month' })
   @IsNumber()
   month: string;
 
   @CreateDateColumn({ name: 'created_at', comment: '생성일' })
+  @ApiProperty({ description: 'CreatedAt' })
   createdAt: Date;
 
   @CreateDateColumn({ name: 'updated_at', comment: '수정일' })
+  @ApiProperty({ description: 'UpdatedAt' })
   updatedAt: Date;
 
   //관계
