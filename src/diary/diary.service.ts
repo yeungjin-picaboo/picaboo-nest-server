@@ -11,17 +11,29 @@ import { DiarysRepository } from './repositories/diary.repository';
 export class DiarysService {
   constructor(private readonly diaryRepository: DiarysRepository) {}
 
-  // getAllDiary() {}
+  async getAllDiary(userId, year, month) {
+    try {
+      const diaries = await this.diaryRepository.getAllDiary(userId, year, month);
+      if (!diaries) {
+        return 'nothing';
+      }
+      return diaries;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  // async getDiary(id: number): Promise<Diary> {
-  // const found = await this.diaryRepository.findOne(id);
-
-  // if (!found) {
-  //   throw new NotFoundException(`Cant't find Diary with id ${id}`);
-  // }
-
-  // return found;
-  // }
+  async getDiary(diaryId, userId) {
+    try {
+      const result = await this.diaryRepository.getDiary(diaryId, userId);
+      if (!result) {
+        return '아무것도 없어용';
+      }
+      return result;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<CreateDiaryOutput> {
     try {

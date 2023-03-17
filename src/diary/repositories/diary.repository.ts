@@ -18,11 +18,41 @@ export class DiarysRepository {
     @InjectRepository(User)
     private userRepository: Repository<User>
   ) {}
-  async getAllDiary(page) {
+
+  async getAllDiary(userId, year, month) {
     try {
-      const diary = await this.diaryRepository.createQueryBuilder('diary');
+      const diaries = await this.diaryRepository.findBy({ user: { id: userId }, year, month });
+      console.log(diaries);
+
+      if (!diaries) {
+        return 'nothing';
+      }
+      return diaries;
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  /**
+   *
+   * @param diaryId
+   * @param userId
+   * @returns
+   */
+
+  async getDiary(diaryId, userId) {
+    try {
+      //비교하고
+      const diary = await this.diaryRepository.findOneBy({ id: diaryId, user: { id: userId } });
+      console.log(diary);
+
+      if (!diary) {
+        return 'error ----';
+      }
+
+      return diary;
+    } catch (error) {
+      return error;
     }
   }
 
