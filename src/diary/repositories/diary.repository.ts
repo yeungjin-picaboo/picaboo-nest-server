@@ -5,7 +5,7 @@ import { CustomRepository } from 'src/common/custom-repository.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { UserRespository } from 'src/users/repositories/user.repository';
 import { Repository } from 'typeorm';
-import { DeleteDiaryDto } from '../dtos/delete-diary.dto';
+import { UpdateDiaryDto } from '../dtos/update-diary.dto';
 import { Diary } from '../entities/diary.entity';
 
 @Injectable()
@@ -17,43 +17,81 @@ export class DiarysRepository {
     @InjectRepository(User)
     private userRepository: Repository<User>
   ) {}
-  async getAllDiary(page) {
+
+  async getAllDiary(userId, year, month) {
     try {
-      const diary = await this.diaryRepository.createQueryBuilder('diary');
+      const diaries = await this.diaryRepository.findBy({ user: { id: userId }, year, month });
+
+      if (!diaries) {
+        return 'You dont have diary';
+      }
+      return diaries;
     } catch (error) {
-      console.error(error);
+      console.error(error, 'Failed get diaries');
     }
   }
 
-  // async createDiary({ title, content, year, month, userId }) {
-  //   try {
-  //     const user = await this.userRepository.findOneBy({ id: userId });
-  //     const diary = await this.diaryRepository.save(
-  //       this.diaryRepository.create({
-  //         title,
-  //         content,
-  //         year,
-  //         month,
-  //         user,
-  //       }),
-  //     );
-  //     console.log(diary);
-  //     return diary;
-  //   } catch (error) {
-  //     console.error(error);
-  //     return false;
-  //   }
-  // }
+  /**
+   *
+   * @param diaryId
+   * @param userId
+   * @returns
+   */
 
-  async deleteDiary({ diaryId, userId }) {
+  async getDiary(diaryId, userId) {
     try {
-      const user = await this.userRepository.findOneBy({ id: userId });
-      const deleteDiary = await this.diaryRepository.delete({ id: diaryId });
+      const diary = await this.diaryRepository.findOneBy({ id: diaryId, user: { id: userId } });
 
-      return deleteDiary;
+      if (!diary) {
+        return 'You dont have diary';
+      }
+      return diary;
     } catch (error) {
-      console.error(error);
       return false;
     }
+  }
+
+  async createDiary({ title, content, year, month, userId }) {
+    try {
+      const user = await this.userRepository.findOneBy({ id: userId });
+      const diary = await this.diaryRepository.save(
+        this.diaryRepository.create({
+          title,
+          content,
+          year,
+          month,
+          user
+        })
+      );
+      console.log(diary);
+      return diary;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async updateDiary(diaryId, updateDiaryDto: UpdateDiaryDto, userId) {
+    try {
+      const diary = await this.diaryRepository.findOneBy({ id: diaryId, user: { id: userId } });
+
+      if (!diary) {
+        return false;
+      }
+
+      return this.diaryRepository.save({
+        id: diaryId,
+        ...updateDiaryDto
+      });
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async deleteDiary({ diaryId, userId }) {
+    const deleteDiary = await this.diaryRepository.delete({ id: diaryId, user: { id: userId } });
+    if (deleteDiary.affected === 0) {
+      return false;
+    }
+    return deleteDiary;
   }
 }
