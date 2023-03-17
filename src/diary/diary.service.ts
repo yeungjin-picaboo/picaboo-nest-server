@@ -54,7 +54,7 @@ export class DiarysService {
     }
   }
 
-  async deleteDiary(diaryId, userId): Promise<DeleteDiaryOutput> {
+  async deleteDiary(diaryId: number): Promise<DeleteDiaryOutput> {
     try {
       const result = await this.diaryRepository.deleteDiary({ diaryId, userId });
       if (!result) {
