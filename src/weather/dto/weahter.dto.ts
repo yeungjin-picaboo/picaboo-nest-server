@@ -6,9 +6,6 @@ export class GetWeatherDto {
 
   @IsString()
   readonly longitude: string;
-
-  @IsString()
-  readonly content: string;
 }
 
 export class GetCoordinateDto {
