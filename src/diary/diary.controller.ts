@@ -20,7 +20,7 @@ import { CreateDiaryDto } from './dtos/create-diary.dto';
 import { UpdateDiaryDto } from './dtos/update-diary.dto';
 import { Diary } from './entities/diary.entity';
 
-@Controller('diarys')
+@Controller('/api/diaries')
 @ApiTags('Diary API')
 export class DiarysController {
   constructor(private diaryService: DiarysService) {}
