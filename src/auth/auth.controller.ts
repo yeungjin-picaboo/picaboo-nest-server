@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dtos/auth.dto';
 import { AccessTokenGuard } from './guards/accessToken.guard';
 
-@Controller('auth')
+@Controller('/api')
 @ApiTags('User API')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -19,11 +19,19 @@ export class AuthController {
     return this.authService.signUp(createUserDto);
   }
 
-  @Post('/signin')
+  @Post('/login')
   @ApiOperation({ summary: '로그인 하는 API', description: '로그인' })
   @ApiCreatedResponse({ description: '로그인을 합니다.', type: User })
   signIn(@Body() data: AuthDto, @Res({ passthrough: true }) res: Response) {
     return this.authService.signIn(data, res);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/logout')
+  @ApiOperation({ summary: '로그아웃 API', description: '로그아웃' })
+  @ApiCreatedResponse({ description: '로그아웃을 합니다.', type: User })
+  logout(@Req() req: Request, @Res() res: Response) {
+    this.authService.logout(req.user['userId'], res);
   }
 
   @UseGuards(AccessTokenGuard)

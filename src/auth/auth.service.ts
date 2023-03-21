@@ -6,6 +6,7 @@ import { UserRespository } from 'src/users/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dtos/auth.dto';
 import { Response } from 'express';
+import { create } from 'domain';
 
 @Injectable()
 export class AuthService {
@@ -22,20 +23,23 @@ export class AuthService {
         throw new BadRequestException('This email already exists');
       }
 
-      const nicknameExists = await this.userRespository.existsNickname(createUserDto.nickname);
-      if (nicknameExists) {
-        throw new BadRequestException('This nickname already exists');
-      }
+      // const nicknameExists = await this.userRespository.existsNickname(createUserDto.nickname);
+      // if (nicknameExists) {
+      //   throw new BadRequestException('This nickname already exists');
+      // }
 
       const hash = await bcrypt.hash(createUserDto.password, 10);
-      const { email, nickname } = createUserDto;
+      // const { email, nickname } = createUserDto;
+      const { email } = createUserDto;
 
-      await this.userRespository.createUser(email, hash, nickname);
+      await this.userRespository.createUser(email, hash);
       return { message: 'Success Create user!' };
     } catch (error) {
       throw new BadRequestException('Error Signup');
     }
   }
+
+  async logout(userId, res: Response) {}
 
   async signIn(data: AuthDto, res: Response): Promise<any> {
     try {
@@ -69,5 +73,11 @@ export class AuthService {
     ]);
 
     return { accessToken, refreshToken };
+  }
+
+  async updateAccessToken() {}
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    await this.userRespository.updateRefreshToken(userId, refreshToken);
   }
 }
