@@ -9,7 +9,7 @@ import { User } from '../entities/user.entity';
 export class UserRespository {
   constructor(
     @InjectRepository(User)
-    private userRespository: Repository<User>,
+    private userRespository: Repository<User>
   ) {}
 
   async existsUser(email) {
@@ -23,20 +23,27 @@ export class UserRespository {
     }
   }
 
-  async existsNickname(nickname) {
-    try {
-      const exists = await this.userRespository.findOneBy({ nickname });
-      return exists;
-    } catch (error) {
-      console.error(error);
-      throw new BadRequestException('Exists Nickname');
+  // async existsNickname(nickname) {
+  //   try {
+  //     const exists = await this.userRespository.findOneBy({ nickname });
+  //     return exists;
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new BadRequestException('Exists Nickname');
+  //   }
+  // }
+
+  async updateRefreshToken(userId, refreshToken) {
+    const user = await this.userRespository.findOneBy({ id: userId });
+    if (user) {
+      await this.userRespository.update({ id: userId }, refreshToken);
     }
   }
 
-  async createUser(email, password, nickname) {
+  async createUser(email, password) {
     try {
       const user = await this.userRespository.save(
-        this.userRespository.create({ email, password, nickname }),
+        this.userRespository.create({ email, password })
       );
       console.log(user);
       return user;

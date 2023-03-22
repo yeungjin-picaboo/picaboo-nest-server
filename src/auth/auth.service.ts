@@ -6,7 +6,6 @@ import { UserRespository } from 'src/users/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dtos/auth.dto';
 import { Response } from 'express';
-import { create } from 'domain';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +38,7 @@ export class AuthService {
     }
   }
 
-  async logout(userId, res: Response) {}
+  async logout(userId, res: Response) {} //토큰만 없애고
 
   async signIn(data: AuthDto, res: Response): Promise<any> {
     try {
@@ -53,6 +52,7 @@ export class AuthService {
         userId: user.id
       });
       res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });
+      // res.cookie('accessToken', tokens.accessToken);
       return { accessToken: tokens.accessToken };
     } catch (error) {
       console.log(error);
@@ -76,6 +76,7 @@ export class AuthService {
   }
 
   async updateAccessToken() {}
+  //refreshtoken으로 accesstoken을 발급받아야함
 
   async updateRefreshToken(userId: string, refreshToken: string) {
     await this.userRespository.updateRefreshToken(userId, refreshToken);
