@@ -62,4 +62,9 @@ export class DiarysController {
     console.log(updateDiaryDto);
     return this.diaryService.updateDiary(diaryId, req.user['userId'], updateDiaryDto);
   }
+
+  @Get("diaries/diaries-list")
+  async getDiariesList(@Req() req: Request){
+    return
+  }
 }

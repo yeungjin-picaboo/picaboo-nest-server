@@ -10,9 +10,8 @@ import { Diary } from './diary/entities/diary.entity';
 import { User } from './users/entities/user.entity';
 import { PictureModule } from './picture/picture.module';
 import { GoogleUserModule } from './google_user/google_user.module';
-import { WeatherModule } from './weather/weather.module';
+import { WeatherModule } from './weather-mood/weather-mood.module';
 import { GoogleUser } from './google_user/entities/google_user.entity';
-import { EmtotionModule } from './emotion/emotion.module';
 import { createPicture } from './picture/entities/create_picture.entity';
 import { DomainModuleModule } from './domain-module/domain-module.module';
 
@@ -39,7 +38,7 @@ import { DomainModuleModule } from './domain-module/domain-module.module';
     GoogleUserModule,
     WeatherModule,
     PictureModule,
-    EmtotionModule,
+
     DomainModuleModule
   ],
   controllers: [],

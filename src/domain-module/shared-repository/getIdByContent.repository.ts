@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BodyEmotionDto, CreateWeatherDto } from 'src/diary/dtos/create-diary.dto';
+import { CreateWeatherDto } from 'src/diary/dtos/create-diary.dto';
 import { Diary } from 'src/diary/entities/diary.entity';
-import { EmotionDto } from 'src/emotion/dto/emotion.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class SharedRepository implements SharedRepository {
   constructor(@InjectRepository(Diary) private readonly weatherRepository: Repository<Diary>) {}
 
-  async getIdByContent(dto: CreateWeatherDto | EmotionDto): Promise<number> {
+  async getIdByContent(dto: CreateWeatherDto): Promise<number> {
     const { content } = dto;
     const entity = await this.weatherRepository.findOneBy({ content });
     return entity?.id;

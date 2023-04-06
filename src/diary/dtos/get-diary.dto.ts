@@ -4,3 +4,5 @@ import { Diary } from '../entities/diary.entity';
 export class GetDiaryOutput extends CoreOutput {
   diary?: Diary;
 }
+
+

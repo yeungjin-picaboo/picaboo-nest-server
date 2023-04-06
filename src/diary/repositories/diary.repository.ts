@@ -94,4 +94,10 @@ export class DiarysRepository {
     }
     return deleteDiary;
   }
+
+  async getDiaryList(email) {
+    const getDiaryList = await this.diaryRepository.findOne({
+      email
+    });
+  }
 }

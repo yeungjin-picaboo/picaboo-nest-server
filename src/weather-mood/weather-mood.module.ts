@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { WeatherController } from './weather.controller';
-import { WeatherService } from './weather.service';
+import { WeatherController } from './weather-mood.controller';
+import { WeatherService } from './weather-mood.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Diary } from 'src/diary/entities/diary.entity';
-import { WeatherRepository } from './repositories/weather.repository';
+import { WeatherMoodRepository } from './repositories/weather-mood.repository';
 import { SharedRepository } from 'src/domain-module/shared-repository/getIdByContent.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Diary])],
   controllers: [WeatherController],
-  providers: [WeatherService, WeatherRepository, SharedRepository]
+  providers: [WeatherService, WeatherMoodRepository, SharedRepository]
 })
 export class WeatherModule {}

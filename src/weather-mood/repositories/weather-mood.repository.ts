@@ -2,18 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Diary } from 'src/diary/entities/diary.entity';
 import { Repository } from 'typeorm';
-import { CreateWeatherDto } from 'src/diary/dtos/create-diary.dto';
 import { SharedRepository } from 'src/domain-module/shared-repository/getIdByContent.repository';
+import { CreateWeatherDto } from '../dto/weahter.dto';
 
 @Injectable()
-export class WeatherRepository {
+export class WeatherMoodRepository {
   constructor(
     @InjectRepository(Diary) private readonly weatherRepository: Repository<Diary>,
     private readonly sharedRepository: SharedRepository
   ) {}
 
   async updateWeatherById(weatherDto: CreateWeatherDto): Promise<Diary> {
-    const id = await this.sharedRepository.getIdByContent(weatherDto);
+    const id = await this.sharedRepository.getIdByContent(weatherDto); //? content로 id를 찾음
 
     const weatherStatus = await this.weatherRepository.findOneBy({ id });
     if (weatherStatus) {

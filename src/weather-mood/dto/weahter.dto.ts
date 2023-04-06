@@ -1,4 +1,6 @@
+import { PickType } from '@nestjs/mapped-types';
 import { IsString } from 'class-validator';
+import { Diary } from 'src/diary/entities/diary.entity';
 
 export class GetWeatherDto {
   @IsString()
@@ -6,6 +8,9 @@ export class GetWeatherDto {
 
   @IsString()
   readonly longitude: string;
+
+  @IsString()
+  readonly content: string;
 }
 
 export class GetCoordinateDto {
@@ -23,3 +28,4 @@ export class UpdateWeatherDtoId {
   @IsString()
   readonly weather: number;
 }
+export class CreateWeatherDto extends PickType(Diary, ['content', 'weather']) {}

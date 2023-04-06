@@ -28,6 +28,14 @@ export class Diary extends BaseEntity {
 
   @Column({ nullable: true })
   @IsString()
+  year: number;
+
+  @Column({ nullable: true })
+  @IsString()
+  month: number;
+
+  @Column({ nullable: true })
+  @IsString()
   emotion: string;
 
   @Column({ nullable: true })
@@ -41,6 +49,6 @@ export class Diary extends BaseEntity {
   updatedAt: Date;
 
   //관계
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User, user => user.email)
   user: User;
 }
