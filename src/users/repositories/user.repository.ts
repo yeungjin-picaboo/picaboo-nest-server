@@ -23,27 +23,38 @@ export class UserRespository {
     }
   }
 
-  // async existsNickname(nickname) {
-  //   try {
-  //     const exists = await this.userRespository.findOneBy({ nickname });
-  //     return exists;
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new BadRequestException('Exists Nickname');
-  //   }
-  // }
+  async findUserById(id) {
+    try {
+      const exists = await this.userRespository.findOneBy({ id });
+      return exists;
+    } catch (error) {
+      console.error(error);
 
-  async updateRefreshToken(userId, refreshToken) {
-    const user = await this.userRespository.findOneBy({ id: userId });
-    if (user) {
-      await this.userRespository.update({ id: userId }, refreshToken);
+      throw new BadRequestException('Exists User');
     }
   }
 
-  async createUser(email, password) {
+  async existsNickname(nickname) {
+    try {
+      const exists = await this.userRespository.findOneBy({ nickname });
+      return exists;
+    } catch (error) {
+      console.error(error);
+      throw new BadRequestException('Exists Nickname');
+    }
+  }
+
+  async refreshToken(id, refreshToken) {
+    const refresh = await this.userRespository.save(
+      this.userRespository.create({ id, refreshToken })
+    );
+    return refresh;
+  }
+
+  async createUser(email, password, nickname) {
     try {
       const user = await this.userRespository.save(
-        this.userRespository.create({ email, password })
+        this.userRespository.create({ email, password, nickname })
       );
       console.log(user);
       return user;

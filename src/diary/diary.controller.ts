@@ -37,7 +37,7 @@ export class DiarysController {
 
   // 전체일기보기
   // 유저의 일기 중 생성일자와 보낸 year, month가 일치하는 모든 일기 그림 경로와 id데이터 가져오기
-  // res data -> [{diary_id: “”, source: “”},{diary_id: “”, source: “”}, …]
+  // res data -> [{diary_id: “”, source: “”},{diary_id: “”, source: “”},
   @UseGuards(AccessTokenGuard)
   @Get('/years/:year/months/:month')
   @ApiOperation({ summary: '일기 전체정보 API', description: '일기 전체정보 보기' })
@@ -45,7 +45,12 @@ export class DiarysController {
     description: '내가 작성한 전체일기를 년도, 월별로 확인할 수 있습니다.',
     type: Diary
   })
-  getAllDiary(@Param('year') year: number, @Param('month') month: string, @Req() req: Request) {
+  getAllDiary(
+    @Param('year') year: number,
+    @Param('month') month: string,
+
+    @Req() req: Request
+  ) {
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
   }
 

@@ -30,6 +30,11 @@ export class Diary extends BaseEntity {
   @IsNumber()
   year: number;
 
+  // @Column()
+  // @ApiProperty({ description: 'ArtUrl' })
+  // @IsString()
+  // art: string;
+
   @Column()
   @ApiProperty({ description: 'Month' })
   @IsNumber()

@@ -5,7 +5,7 @@ import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { UserRespository } from 'src/users/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dtos/auth.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -15,30 +15,27 @@ export class AuthService {
     private readonly configService: ConfigService
   ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<any> {
+  async signUp(createUserDto: CreateUserDto, res: Response): Promise<any> {
     try {
       const userExists = await this.userRespository.existsUser(createUserDto.email);
       if (userExists) {
-        throw new BadRequestException('This email already exists');
+        throw new BadRequestException('Email already exists');
       }
 
-      // const nicknameExists = await this.userRespository.existsNickname(createUserDto.nickname);
-      // if (nicknameExists) {
-      //   throw new BadRequestException('This nickname already exists');
-      // }
+      const nicknameExists = await this.userRespository.existsNickname(createUserDto.nickname);
+      if (nicknameExists) {
+        throw new BadRequestException('Nickname already exists');
+      }
 
       const hash = await bcrypt.hash(createUserDto.password, 10);
-      // const { email, nickname } = createUserDto;
-      const { email } = createUserDto;
+      const { email, nickname } = createUserDto;
 
-      await this.userRespository.createUser(email, hash);
+      await this.userRespository.createUser(email, hash, nickname);
       return { message: 'Success Create user!' };
     } catch (error) {
       throw new BadRequestException('Error Signup');
     }
   }
-
-  async logout(userId, res: Response) {} //토큰만 없애고
 
   async signIn(data: AuthDto, res: Response): Promise<any> {
     try {
@@ -51,13 +48,21 @@ export class AuthService {
       const tokens = await this.getTokens({
         userId: user.id
       });
-      res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });
-      // res.cookie('accessToken', tokens.accessToken);
+      console.log(tokens);
+      // res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });
       return { accessToken: tokens.accessToken };
     } catch (error) {
       console.log(error);
       throw new BadRequestException('Failed Login');
     }
+  }
+
+  async logout(userId) {
+    const removeRefreshToken = await this.userRespository.refreshToken(userId, null);
+    if (!removeRefreshToken.refreshToken) {
+      return { message: 'Success' };
+    }
+    return { message: 'failed' };
   }
 
   async getTokens(payload: { userId: number }) {
@@ -75,10 +80,35 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async updateAccessToken() {}
-  //refreshtoken으로 accesstoken을 발급받아야함
+  //다시 재발급해줄떄
+  async updateAccessToken(req: Request) {
+    //인증 나다
+    const verifyedUser = this.jwtService.verify(req.cookies.refresh_token, {
+      secret: this.configService.get<string>('JWT_REFRESH_SECRET')
+    });
+    console.log(verifyedUser);
 
+    const user = await this.userRespository.existsUser(verifyedUser['userId']);
+    return {
+      accessToken: await this.jwtService.signAsync(
+        { userId: user.id },
+        {
+          expiresIn: 60 * 15,
+          secret: this.configService.get('JWT_ACCESS_SECRET')
+        }
+      ),
+      refreshToken: await this.jwtService.signAsync(
+        { userId: user.id },
+        {
+          expiresIn: 60 * 60 * 24 * 7,
+          secret: this.configService.get('JWT_REFRESH_SECRET')
+        }
+      )
+    };
+  }
+
+  //리프레시토큰이 완료됐을때, 다시 재발급받을때
   async updateRefreshToken(userId: string, refreshToken: string) {
-    await this.userRespository.updateRefreshToken(userId, refreshToken);
+    await this.userRespository.refreshToken(userId, refreshToken);
   }
 }

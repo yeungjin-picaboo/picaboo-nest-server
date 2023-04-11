@@ -15,9 +15,9 @@ export class User extends BaseEntity {
   @IsString()
   password: string;
 
-  // @Column({ unique: true })
-  // @IsString()
-  // nickname: string;
+  @Column({ unique: true, nullable: true })
+  @IsString()
+  nickname: string;
 
   @Column({ nullable: true })
   @Exclude()
