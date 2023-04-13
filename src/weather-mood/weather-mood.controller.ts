@@ -1,11 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { WeatherService } from './weather-mood.service';
 import { GetCoordinateDto, GetWeatherDto } from './dto/weahter.dto';
-import { GetEmotionDto } from './dto/get-weather-mood.dto';
+import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 
 @Controller('weather')
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
+
+
+  @UseGuards(AccessTokenGuard)
   @Post('ai-weather-mood')
   async weatherData(@Body() req: GetWeatherDto) {
     // body에서는 위도와 content를 전달해줌.

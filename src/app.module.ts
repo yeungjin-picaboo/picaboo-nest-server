@@ -14,6 +14,7 @@ import { WeatherModule } from './weather-mood/weather-mood.module';
 import { GoogleUser } from './google_user/entities/google_user.entity';
 import { createPicture } from './picture/entities/create_picture.entity';
 import { DomainModuleModule } from './domain-module/domain-module.module';
+import { QnaModule } from './qna/qna.module';
 
 @Module({
   imports: [
@@ -39,7 +40,9 @@ import { DomainModuleModule } from './domain-module/domain-module.module';
     WeatherModule,
     PictureModule,
 
-    DomainModuleModule
+    DomainModuleModule,
+
+    QnaModule
   ],
   controllers: [],
   providers: []

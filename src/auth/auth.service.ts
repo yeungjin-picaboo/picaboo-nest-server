@@ -12,21 +12,17 @@ export class AuthService {
   constructor(
     private readonly userRespository: UserRespository,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService
   ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<any> {
     try {
-      const userExists = await this.userRespository.existsUser(
-        createUserDto.email,
-      );
+      const userExists = await this.userRespository.existsUser(createUserDto.email);
       if (userExists) {
         throw new BadRequestException('This email already exists');
       }
 
-      const nicknameExists = await this.userRespository.existsNickname(
-        createUserDto.nickname,
-      );
+      const nicknameExists = await this.userRespository.existsNickname(createUserDto.nickname);
       if (nicknameExists) {
         throw new BadRequestException('This nickname already exists');
       }
@@ -50,7 +46,7 @@ export class AuthService {
 
       if (!passwordCheck) throw new BadRequestException('Check your password.');
       const tokens = await this.getTokens({
-        userId: user.id,
+        userId: user.id
       });
       res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });
       return { accessToken: tokens.accessToken };
@@ -64,14 +60,25 @@ export class AuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         expiresIn: 60 * 15,
-        secret: this.configService.get('JWT_ACCESS_SECRET'),
+        secret: this.configService.get('JWT_ACCESS_SECRET')
       }),
       this.jwtService.signAsync(payload, {
         expiresIn: 60 * 60 * 24 * 7,
-        secret: this.configService.get('JWT_REFRESH_SECRET'),
-      }),
+        secret: this.configService.get('JWT_REFRESH_SECRET')
+      })
     ]);
 
     return { accessToken, refreshToken };
+  }
+
+  async decodeToken(token: string): Promise<
+    | null
+    | {
+        [key: string]: any;
+      }
+    | string
+  > {
+    const decodedToken = this.jwtService.decode(token);
+    return decodedToken;
   }
 }
