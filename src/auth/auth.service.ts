@@ -46,7 +46,8 @@ export class AuthService {
 
       if (!passwordCheck) throw new BadRequestException('Check your password.');
       const tokens = await this.getTokens({
-        userId: user.id
+        userId: user.id,
+        nickname: user.nickname
       });
       res.cookie('refreshToken', tokens.refreshToken, { httpOnly: true });
       return { accessToken: tokens.accessToken };
@@ -56,10 +57,11 @@ export class AuthService {
     }
   }
 
-  async getTokens(payload: { userId: number }) {
+  // payload 값 넣어주는 부분
+  async getTokens(payload: { userId: number; nickname: string }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        expiresIn: 60 * 15,
+        expiresIn: 60 * 15 * 24,
         secret: this.configService.get('JWT_ACCESS_SECRET')
       }),
       this.jwtService.signAsync(payload, {
