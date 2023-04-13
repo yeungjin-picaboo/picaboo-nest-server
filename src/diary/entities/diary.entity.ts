@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -14,25 +15,25 @@ export class Diary extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number; //diaryId
 
-  @Column({ nullable: true })
+  @Column()
+  @ApiProperty({ description: 'Title' })
   @IsString()
   title: string;
 
-  @Column({ nullable: true })
+  @Column()
+  @ApiProperty({ description: 'Content' })
   @IsString()
   content: string;
 
-  @Column({ nullable: true })
-  @IsString()
-  weather: string;
-
-  @Column({ nullable: true })
-  @IsString()
+  @Column()
+  @ApiProperty({ description: 'Year' })
+  @IsNumber()
   year: number;
 
-  @Column({ nullable: true })
-  @IsString()
-  month: number;
+  @Column()
+  @ApiProperty({ description: 'Month' })
+  @IsNumber()
+  month: string;
 
   @Column({ nullable: true })
   @IsString()
@@ -40,12 +41,18 @@ export class Diary extends BaseEntity {
 
   @Column({ nullable: true })
   @IsString()
+  weather: string;
+
+  @Column({ nullable: true })
+  @IsString()
   source: string;
 
   @CreateDateColumn({ name: 'created_at', comment: '생성일' })
+  @ApiProperty({ description: 'CreatedAt' })
   createdAt: Date;
 
   @CreateDateColumn({ name: 'updated_at', comment: '수정일' })
+  @ApiProperty({ description: 'UpdatedAt' })
   updatedAt: Date;
 
   //관계
