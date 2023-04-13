@@ -22,7 +22,7 @@ export class Qna extends BaseEntity {
   @IsString()
   nickName: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNumber()
   answerId: number;
 

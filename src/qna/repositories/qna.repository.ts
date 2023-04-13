@@ -8,14 +8,23 @@ import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class QnaRepository {
-  constructor(
-    @InjectRepository(Qna) private readonly QnaRepository: Repository<Qna>,
-    private readonly authService: AuthService
-  ) {}
+  constructor(@InjectRepository(Qna) private readonly QnaRepository: Repository<Qna>) {}
 
-  async getAllQna(req: Request): Promise<Array> {
-    const token = req.headers.authorization?.split(' ')[1];
-    const decodedToken = await this.authService.decodeToken(token)
-    const qna = await this.QnaRepository.findBy({ nickName: decodedToken.user });
+  async getAllQna(page): Promise<Array<Qna>> {
+    const qna = await this.QnaRepository.find({
+      skip: page - 1 * 11,
+      take: page * 11,
+      order: { id: 'ASC' }
+    });
+    return qna;
+  }
+
+  async createQuestion(title, content, nickName, isPrivate) {
+    const createQna = await this.QnaRepository.create({
+      title,
+      content,
+      isPrivate,
+      nickName
+    });
   }
 }
