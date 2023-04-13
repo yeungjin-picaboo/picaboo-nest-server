@@ -10,9 +10,9 @@ import { Diary } from './diary/entities/diary.entity';
 import { User } from './users/entities/user.entity';
 import { PictureModule } from './picture/picture.module';
 import { GoogleUserModule } from './google_user/google_user.module';
-import { WeatherModule } from './weather/weather.module';
 import { GoogleUser } from './google_user/entities/google_user.entity';
-import { join } from 'path';
+import { WeatherModule } from './weather-mood/weather-mood.module';
+import { QnaModule } from './qna/qna.module';
 
 @Module({
   imports: [
@@ -36,7 +36,8 @@ import { join } from 'path';
     DiarysModule,
     GoogleUserModule,
     WeatherModule,
-    PictureModule
+    PictureModule,
+    QnaModule
   ],
   controllers: [],
   providers: []

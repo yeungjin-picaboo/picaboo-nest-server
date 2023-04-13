@@ -35,6 +35,18 @@ export class Diary extends BaseEntity {
   @IsNumber()
   month: string;
 
+  @Column({ nullable: true })
+  @IsString()
+  emotion: string;
+
+  @Column({ nullable: true })
+  @IsString()
+  weather: string;
+
+  @Column({ nullable: true })
+  @IsString()
+  source: string;
+
   @CreateDateColumn({ name: 'created_at', comment: '생성일' })
   @ApiProperty({ description: 'CreatedAt' })
   createdAt: Date;

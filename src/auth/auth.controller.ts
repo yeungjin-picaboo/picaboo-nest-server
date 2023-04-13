@@ -23,6 +23,7 @@ export class AuthController {
   @ApiOperation({ summary: '로그인 하는 API', description: '로그인' })
   @ApiCreatedResponse({ description: '로그인을 합니다.', type: User })
   signIn(@Body() data: AuthDto, @Res({ passthrough: true }) res: Response) {
+    
     return this.authService.signIn(data, res);
   }
 
