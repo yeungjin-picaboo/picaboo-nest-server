@@ -29,3 +29,4 @@ export class UpdateWeatherDtoId {
   readonly weather: number;
 }
 export class CreateWeatherDto extends PickType(Diary, ['content', 'weather']) {}
+export class CreateMoodDto extends PickType(Diary, ['content']) {}

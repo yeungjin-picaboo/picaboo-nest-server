@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { CreateWeatherDto, GetCoordinateDto } from './dto/weahter.dto';
+import { GetCoordinateDto } from './dto/weahter.dto';
 import { WeatherMoodRepository } from './repositories/weather-mood.repository';
-import { GetEmotionDto } from './dto/get-weather-mood.dto';
 import { returnEmotionDto } from './dto/return-type-weather-mood.dto';
 
 @Injectable()
@@ -22,10 +21,9 @@ export class WeatherService {
         `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}&units=metric`
       );
       const { weather } = weatherData.data;
-      console.log(weather[0].main);
       return weather[0].main;
     } catch (err) {
-      //에러처리
+      console.log('error : ', err);
     }
   }
 
@@ -35,7 +33,7 @@ export class WeatherService {
    * @param moodDto content
    * @returns returnEmotionDto = { emotion }
    */
-  async getMood(moodDto: string): Promise<returnEmotionDto> {
+  async getMood(content: string): Promise<returnEmotionDto> {
     const client_id = process.env.CLOVA_CLIENT_ID;
     const client_secret = process.env.CLOVA_SECRET;
     const url = process.env.CLOVA_URL;
@@ -46,13 +44,13 @@ export class WeatherService {
       'Content-Type': 'application/json'
     };
     // const { content } = diary;
-    const content = { content: moodDto['content'] };
+
+    const data = { content };
 
     try {
-      let test = await axios.post(url, content, { headers });
-      let emotionDto: returnEmotionDto = {
-        emotion: test.data.document.sentiment
-      };
+      let test = await axios.post(url, data, { headers });
+      let emotionDto: returnEmotionDto = test.data.document.sentiment;
+
       return emotionDto;
     } catch (error) {
       return error;

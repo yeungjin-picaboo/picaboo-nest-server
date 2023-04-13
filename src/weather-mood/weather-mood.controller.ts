@@ -3,13 +3,12 @@ import { WeatherService } from './weather-mood.service';
 import { GetCoordinateDto, GetWeatherDto } from './dto/weahter.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 
-@Controller('weather')
+@Controller('meta')
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
 
-
   @UseGuards(AccessTokenGuard)
-  @Post('ai-weather-mood')
+  @Post('')
   async weatherData(@Body() req: GetWeatherDto) {
     // body에서는 위도와 content를 전달해줌.
     try {
@@ -19,9 +18,9 @@ export class WeatherController {
       const weather = await this.weatherService.getWeather(coordinate); // 날씨를 받음
 
       // const modifyContent = new GetEmotionDto(content);
-      const mood = await this.weatherService.getMood(content);
+      const emotion = await this.weatherService.getMood(content);
       console.log(weather);
-      return { weather, mood };
+      return { weather, emotion };
     } catch (err) {
       return err;
     }
