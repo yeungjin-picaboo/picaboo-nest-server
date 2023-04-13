@@ -15,6 +15,7 @@ import { DomainModuleModule } from './domain-module/domain-module.module';
 import { GoogleUser } from './google_user/entities/google_user.entity';
 import { WeatherModule } from './weather-mood/weather-mood.module';
 import { QnaModule } from './qna/qna.module';
+import { Qna } from './qna/entities/qna.entity';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { QnaModule } from './qna/qna.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Diary, GoogleUser, createPicture],
+      entities: [User, Diary, GoogleUser, createPicture, Qna],
       // "entities: [__dirname + '/**/*.entity{.ts,.js}'],"
       synchronize: true
       // logging: true,
@@ -39,9 +40,7 @@ import { QnaModule } from './qna/qna.module';
     GoogleUserModule,
     WeatherModule,
     PictureModule,
-
     DomainModuleModule,
-
     QnaModule
   ],
   controllers: [],
