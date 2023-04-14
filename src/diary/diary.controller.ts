@@ -55,7 +55,7 @@ export class DiarysController {
   @ApiCreatedResponse({ description: '일기를 작성합니다.', type: Diary })
   @UsePipes(ValidationPipe)
   createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
-    // return this.diaryService.createDiary(createDiaryDto, req);
+    return this.diaryService.createDiary(createDiaryDto, req);
   }
 
   @UseGuards(AccessTokenGuard)

@@ -1,9 +1,7 @@
 import { Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { find, identity } from 'rxjs';
 import { CustomRepository } from 'src/common/custom-repository.decorator';
 import { User } from 'src/users/entities/user.entity';
-import { UserRespository } from 'src/users/repositories/user.repository';
 import { Repository } from 'typeorm';
 import { UpdateDiaryDto } from '../dtos/update-diary.dto';
 import { Diary } from '../entities/diary.entity';
@@ -95,9 +93,8 @@ export class DiarysRepository {
     return deleteDiary;
   }
 
-  async getDiaryList(email) {
-    const getDiaryList = await this.diaryRepository.findOne({
-      email
-    });
+  async getDiaryList({ userId }) {
+    // user의 전체 다이어리 리스트를 보여주면 됨.
+    const getDiaryList = await this.diaryRepository.findOne({});
   }
 }

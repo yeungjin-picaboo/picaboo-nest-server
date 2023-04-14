@@ -36,6 +36,7 @@ export class DiarysService {
 
   async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<CreateDiaryOutput> {
     try {
+      console.log('user : ', req.user);
       await this.diaryRepository.createDiary({
         ...createDiaryDto,
         userId: req.user['userId']
