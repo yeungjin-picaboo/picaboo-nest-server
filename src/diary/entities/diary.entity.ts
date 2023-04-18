@@ -25,20 +25,20 @@ export class Diary extends BaseEntity {
   @IsString()
   content: string;
 
-  @Column()
-  @ApiProperty({ description: 'Year' })
-  @IsNumber()
-  year: number;
+  // @Column()
+  // @ApiProperty({ description: 'Year' })
+  // @IsNumber()
+  // year: number;
 
   // @Column()
   // @ApiProperty({ description: 'ArtUrl' })
   // @IsString()
   // art: string;
 
-  @Column()
-  @ApiProperty({ description: 'Month' })
-  @IsNumber()
-  month: string;
+  // @Column()
+  // @ApiProperty({ description: 'Month' })
+  // @IsNumber()
+  // month: string;
 
   @CreateDateColumn({ name: 'created_at', comment: '생성일' })
   @ApiProperty({ description: 'CreatedAt' })

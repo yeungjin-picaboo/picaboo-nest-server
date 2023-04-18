@@ -7,13 +7,16 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
   UsePipes,
   ValidationPipe
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import axios from 'axios';
 import { Request } from 'express';
+import { clearConfigCache } from 'prettier';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { DiarysService } from './diary.service';
 import { CreateDiaryDto } from './dtos/create-diary.dto';
@@ -24,7 +27,20 @@ import { Diary } from './entities/diary.entity';
 @ApiTags('Diary API')
 export class DiarysController {
   constructor(private diaryService: DiarysService) {}
+  @UseGuards(AccessTokenGuard)
+  @Get('/picture')
+  async getImageUrl(@Body() image: any): Promise<any> {
+    console.log('이미지야:', image);
+    try {
+      const imageURL = `http://192.168.0.14:8080/api/diaries/picture/${image}`;
+      //const responseaa = await axios.get(`${imageURL}/${image}`);
+      console.log(imageURL);
 
+      return { imageURL };
+    } catch (error) {
+      return { error: 'Failed to get image URL' };
+    }
+  }
   // 전체일기 중 클릭했을때 일기id와 일치하는 데이터 모두 얻기
   // res data -> {diary_id: “”, title: “”, content: “”, weather: “”, emotion: “”, source: “”, date: “”}
   @UseGuards(AccessTokenGuard)

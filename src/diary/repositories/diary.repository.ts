@@ -20,7 +20,7 @@ export class DiarysRepository {
 
   async getAllDiary(userId, year, month) {
     try {
-      const diaries = await this.diaryRepository.findBy({ user: { id: userId }, year, month });
+      const diaries = await this.diaryRepository.findBy({ user: { id: userId } });
 
       if (!diaries) {
         return 'You dont have diary';
@@ -51,15 +51,13 @@ export class DiarysRepository {
     }
   }
 
-  async createDiary({ title, content, year, month, userId }) {
+  async createDiary({ title, content, userId }) {
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
       const diary = await this.diaryRepository.save(
         this.diaryRepository.create({
           title,
           content,
-          year,
-          month,
           user
         })
       );
