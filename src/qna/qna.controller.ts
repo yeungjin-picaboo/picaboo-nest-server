@@ -11,6 +11,17 @@ import { UpdateQuestionDto } from './dto/update-diary.dto';
 export class QnaController {
   constructor(private qnaService: QnaService) {}
 
+  /**
+   * 페이지 정보에따라 몇개를 보내줄지( 기본 12글을 보여줌 )
+   * @param page Body로 페이지 정보[1페이지, 2페이지]를 보냄
+   * @returns 객체 배열을 보냄 [ { "id": number,
+                              "title": string,
+                              "content": string,
+                              "isPrivate": boolean,
+                              "nickname": string,
+                              "answerId": null | string,
+                              "createdAt": date} ]
+   */
   @UseGuards(AccessTokenGuard)
   @Get('')
   @ApiOperation({ summary: '전체 질문정보 Api', description: '질문 전체 정보 가져오기' })
@@ -18,11 +29,20 @@ export class QnaController {
   async getAll(@Body('page') page: number) {
     return this.qnaService.getAllQna(page);
   }
-
+  /**
+   * 글 작성 api
+   * @param createQuestion 만들기위한 최소 정보
+   * @param req JWT token
+   * @returns
+   * {
+      "ok": true,
+      "message": "Question successfully created"
+    }
+   */
   @UseGuards(AccessTokenGuard)
   @Post('')
   @ApiOperation({ summary: '질문 작성 Api', description: '질문을 생성합니다.' })
-  @ApiCreatedResponse({ description: '전체 질문글을 가져옵니다', type: Qna })
+  @ApiCreatedResponse({ description: '글을 작성합니다', type: Qna })
   async createQuestion(@Body() createQuestion: GetCreateQuestionDto, @Req() req: Request) {
     return this.qnaService.createQna(createQuestion, req);
   }

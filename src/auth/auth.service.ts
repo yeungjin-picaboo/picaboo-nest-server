@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
@@ -39,6 +39,7 @@ export class AuthService {
 
   async signIn(data: AuthDto, res: Response): Promise<any> {
     try {
+      console.log(data.email);
       const user = await this.userRespository.existsUser(data.email);
       if (!user) throw new BadRequestException('Check your email.');
 
@@ -61,7 +62,7 @@ export class AuthService {
   async getTokens(payload: { userId: number; nickname: string }) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        expiresIn: 60 * 15 * 24,
+        expiresIn: 60 * 15,
         secret: this.configService.get('JWT_ACCESS_SECRET')
       }),
       this.jwtService.signAsync(payload, {
