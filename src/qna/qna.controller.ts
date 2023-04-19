@@ -23,11 +23,11 @@ export class QnaController {
                               "createdAt": date} ]
    */
   @UseGuards(AccessTokenGuard)
-  @Get('')
+  @Get('/page/:id')
   @ApiOperation({ summary: '전체 질문정보 Api', description: '질문 전체 정보 가져오기' })
   @ApiCreatedResponse({ description: '전체 질문글을 가져옵니다', type: Qna })
-  async getAll(@Body('page') page: number) {
-    return this.qnaService.getAllQna(page);
+  async getAll(@Param('id') id: number) {
+    return this.qnaService.getAllQna(id);
   }
   /**
    * 글 작성 api
