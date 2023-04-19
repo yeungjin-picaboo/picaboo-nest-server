@@ -19,8 +19,9 @@ import { DiarysService } from './diary.service';
 import { CreateDiaryDto } from './dtos/create-diary.dto';
 import { UpdateDiaryDto } from './dtos/update-diary.dto';
 import { Diary } from './entities/diary.entity';
+import { create } from 'domain';
 
-@Controller('diarys')
+@Controller('api/diary')
 @ApiTags('Diary API')
 export class DiarysController {
   constructor(private diaryService: DiarysService) {}
@@ -55,6 +56,7 @@ export class DiarysController {
   @ApiCreatedResponse({ description: '일기를 작성합니다.', type: Diary })
   @UsePipes(ValidationPipe)
   createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
+    console.log(createDiaryDto);
     return this.diaryService.createDiary(createDiaryDto, req);
   }
 
@@ -79,8 +81,8 @@ export class DiarysController {
     return this.diaryService.updateDiary(diaryId, req.user['userId'], updateDiaryDto);
   }
 
-  @Get("diaries/diaries-list")
-  async getDiariesList(@Req() req: Request){
-    return
+  @Get('diaries/diaries-list')
+  async getDiariesList(@Req() req: Request) {
+    return;
   }
 }

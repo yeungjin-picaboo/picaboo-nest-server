@@ -11,8 +11,9 @@ export class DiarysService {
   constructor(private readonly diaryRepository: DiarysRepository) {}
 
   async getAllDiary(userId, year, month) {
+    const date = year + '-' + month;
     try {
-      const diaries = await this.diaryRepository.getAllDiary(userId, year, month);
+      const diaries = await this.diaryRepository.getAllDiary(userId, date);
       if (!diaries) {
         return 'Please check it one more time.';
       }
