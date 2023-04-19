@@ -25,15 +25,9 @@ export class Diary extends BaseEntity {
   @IsString()
   content: string;
 
-  @Column()
-  @ApiProperty({ description: 'Year' })
-  @IsNumber()
-  year: number;
-
-  @Column()
-  @ApiProperty({ description: 'Month' })
-  @IsNumber()
-  month: string;
+  @Column({ nullable: true })
+  @IsString()
+  date: string;
 
   @Column({ nullable: true })
   @IsString()
