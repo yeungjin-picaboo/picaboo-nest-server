@@ -38,6 +38,7 @@ export class DiarysService {
   async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<CreateDiaryOutput> {
     try {
       console.log('user : ', req.user);
+      console.log(createDiaryDto);
       await this.diaryRepository.createDiary({
         ...createDiaryDto,
         userId: req.user['userId']
@@ -97,5 +98,11 @@ export class DiarysService {
         error: error.message
       };
     }
+  }
+
+  async getCalendarDiary(userId) {
+    try {
+      return await this.diaryRepository.getCalendarDiary(userId);
+    } catch (error) {}
   }
 }

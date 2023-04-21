@@ -18,12 +18,19 @@ export class DiarysRepository {
 
   async getAllDiary(userId, date) {
     try {
-      const diaries = await this.diaryRepository.findBy({ user: { id: userId }, date });
+      console.log(JSON.stringify(date));
+      console.log(`${date}-%`);
+      const query = await this.diaryRepository
+        .createQueryBuilder('diary')
+        .where(`diary.date LIKE :datePattern`, { datePattern: `${date}-%` })
+        .andWhere(`diary.userId = :userId`, { userId })
+        .orderBy({ id: 'ASC' })
+        .getMany();
 
-      if (!diaries) {
+      if (!query) {
         return 'You dont have diary';
       }
-      return diaries;
+      return query;
     } catch (error) {
       console.error(error, 'Failed get diaries');
     }
@@ -49,13 +56,15 @@ export class DiarysRepository {
     }
   }
 
-  async createDiary({ title, content, date, userId }) {
+  async createDiary({ title, content, emotion, weather, date, userId }) {
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
       const diary = await this.diaryRepository.save(
         this.diaryRepository.create({
           title,
           content,
+          emotion,
+          weather,
           date,
           user
         })
@@ -92,8 +101,30 @@ export class DiarysRepository {
     return deleteDiary;
   }
 
-  async getDiaryList({ userId }) {
-    // user의 전체 다이어리 리스트를 보여주면 됨.
-    const getDiaryList = await this.diaryRepository.findOne({});
+  // async getDiaryList({ userId }) {
+  //   // user의 전체 다이어리 리스트를 보여주면 됨.
+  //   const getDiaryList = await this.diaryRepository.findOne({});
+  // }
+
+  async getCalendarDiary(userId) {
+    // miniCalendar
+    console.log(userId);
+    const getUserDiary = await this.diaryRepository.findBy({ user: { id: userId } });
+    console.log('userDiary', getUserDiary);
+    if (getUserDiary.length != 0) {
+      // not empty
+      let returnArr = [];
+      let sortingArr = []; // 정렬해서 보내줄
+      getUserDiary.map(e => {
+        // sortingArr.push(Number(e.date.split('-')[2]));
+        returnArr.push({ id: e.id, date: e.date });
+      });
+      // returnArr.sort((a, b) => a.id - b.id);
+
+      // console.log(returnArr);
+      return returnArr;
+    } else {
+      return { ok: false, message: '작성한 글이 없습니다.' };
+    }
   }
 }
