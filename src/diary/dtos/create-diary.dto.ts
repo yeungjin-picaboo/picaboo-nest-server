@@ -4,6 +4,6 @@ import { PickType } from '@nestjs/mapped-types';
 import { Diary } from '../entities/diary.entity';
 
 @Entity()
-export class CreateDiaryDto extends PickType(Diary, ['title', 'content', 'createdAt']) {}
+export class CreateDiaryDto extends PickType(Diary, ['title', 'content', 'month', 'year']) {}
 
 export class CreateDiaryOutput extends CoreOutput {}

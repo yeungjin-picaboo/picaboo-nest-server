@@ -51,14 +51,16 @@ export class DiarysRepository {
     }
   }
 
-  async createDiary({ title, content, userId }) {
+  async createDiary({ title, content, userId, month, year }) {
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
       const diary = await this.diaryRepository.save(
         this.diaryRepository.create({
           title,
           content,
-          user
+          user,
+          month,
+          year
         })
       );
       console.log(diary);

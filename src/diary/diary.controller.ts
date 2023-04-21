@@ -17,6 +17,7 @@ import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import axios from 'axios';
 import { Request } from 'express';
 import { clearConfigCache } from 'prettier';
+import { generate } from 'rxjs';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { DiarysService } from './diary.service';
 import { CreateDiaryDto } from './dtos/create-diary.dto';
@@ -29,18 +30,34 @@ export class DiarysController {
   constructor(private diaryService: DiarysService) {}
   @UseGuards(AccessTokenGuard)
   @Get('/picture')
+  @ApiOperation({ summary: 'prompt로 그림 생성 API', description: '그림 생성하기' })
+  @ApiCreatedResponse({ description: '내가 작성한 Text를 Image화 합니다.' })
   async getImageUrl(@Body() image: any): Promise<any> {
-    console.log('이미지야:', image);
     try {
-      const imageURL = `http://192.168.0.14:8080/api/diaries/picture/${image}`;
-      //const responseaa = await axios.get(`${imageURL}/${image}`);
-      console.log(imageURL);
-
-      return { imageURL };
+      const imageURL = `http://172.21.4.175:9000/api/diaries/picture/${image.Prompt}`;
+      const responseAi = await axios.get(imageURL);
+      const urlData = responseAi.data;
+      return urlData;
     } catch (error) {
       return { error: 'Failed to get image URL' };
     }
   }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/emotion')
+  async summarizeDiary(@Body() diary: any): Promise<any> {
+    try {
+      const emotionURL = `http://172.21.4.175:9000/api/diaries/emotion/${diary.content}`;
+      const responseAI = await axios.get(emotionURL);
+      const urlData = responseAI.data;
+      console.log(urlData);
+
+      return urlData;
+    } catch (error) {
+      return { error: 'Failed to get content' };
+    }
+  }
+
   // 전체일기 중 클릭했을때 일기id와 일치하는 데이터 모두 얻기
   // res data -> {diary_id: “”, title: “”, content: “”, weather: “”, emotion: “”, source: “”, date: “”}
   @UseGuards(AccessTokenGuard)
