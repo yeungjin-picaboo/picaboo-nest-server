@@ -59,7 +59,6 @@ export class AuthService {
     }
   }
 
-<<<<<<< HEAD
   async logout(userId) {
     const removeRefreshToken = await this.userRespository.refreshToken(userId, null);
     if (!removeRefreshToken.refreshToken) {
@@ -68,11 +67,7 @@ export class AuthService {
     return { message: 'failed' };
   }
 
-  async getTokens(payload: { userId: number }) {
-=======
-  // payload 값 넣어주는 부분
   async getTokens(payload: { userId: number; nickname: string }) {
->>>>>>> changhoon
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         expiresIn: 60 * 15,
@@ -87,7 +82,6 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-<<<<<<< HEAD
   //다시 재발급해줄떄
   async updateAccessToken(req: Request) {
     //인증 나다
@@ -118,16 +112,5 @@ export class AuthService {
   //리프레시토큰이 완료됐을때, 다시 재발급받을때
   async updateRefreshToken(userId: string, refreshToken: string) {
     await this.userRespository.refreshToken(userId, refreshToken);
-=======
-  async decodeToken(token: string): Promise<
-    | null
-    | {
-        [key: string]: any;
-      }
-    | string
-  > {
-    const decodedToken = this.jwtService.decode(token);
-    return decodedToken;
->>>>>>> changhoon
   }
 }

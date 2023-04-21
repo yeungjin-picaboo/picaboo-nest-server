@@ -18,9 +18,6 @@ export class DiarysRepository {
 
   async getAllDiary(userId, date) {
     try {
-<<<<<<< HEAD
-      const diaries = await this.diaryRepository.findBy({ user: { id: userId } });
-=======
       console.log(JSON.stringify(date));
       console.log(`${date}-%`);
       const query = await this.diaryRepository
@@ -29,7 +26,6 @@ export class DiarysRepository {
         .andWhere(`diary.userId = :userId`, { userId })
         .orderBy({ id: 'ASC' })
         .getMany();
->>>>>>> changhoon
 
       if (!query) {
         return 'You dont have diary';
@@ -60,27 +56,17 @@ export class DiarysRepository {
     }
   }
 
-<<<<<<< HEAD
-  async createDiary({ title, content, userId, month, year }) {
-=======
   async createDiary({ title, content, emotion, weather, date, userId }) {
->>>>>>> changhoon
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
       const diary = await this.diaryRepository.save(
         this.diaryRepository.create({
           title,
           content,
-<<<<<<< HEAD
-          user,
-          month,
-          year
-=======
           emotion,
           weather,
           date,
           user
->>>>>>> changhoon
         })
       );
       console.log(diary);

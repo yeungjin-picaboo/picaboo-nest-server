@@ -25,11 +25,7 @@ import { UpdateDiaryDto } from './dtos/update-diary.dto';
 import { Diary } from './entities/diary.entity';
 import { create } from 'domain';
 
-<<<<<<< HEAD
-@Controller('/api/diaries')
-=======
 @Controller('api/diary')
->>>>>>> changhoon
 @ApiTags('Diary API')
 export class DiarysController {
   constructor(private diaryService: DiarysService) {}
