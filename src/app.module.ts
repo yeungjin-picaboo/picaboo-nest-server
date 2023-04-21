@@ -29,12 +29,8 @@ import { Qna } from './qna/entities/qna.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-<<<<<<< HEAD
-      entities: [User, Diary, GoogleUser],
-=======
       entities: [User, Diary, GoogleUser, createPicture, Qna],
       // "entities: [__dirname + '/**/*.entity{.ts,.js}'],"
->>>>>>> changhoon
       synchronize: true
       // logging: true,
     }),

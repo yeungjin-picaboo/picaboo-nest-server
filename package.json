@@ -31,11 +31,7 @@
     "@nestjs/swagger": "^6.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "@types/bcrypt": "^5.0.0",
-<<<<<<< HEAD
-    "@types/cookie-parser": "^1.4.3",
-=======
     "@types/passport": "^1.0.12",
->>>>>>> changhoon
     "axios": "^1.3.4",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
