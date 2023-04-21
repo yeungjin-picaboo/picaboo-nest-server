@@ -23,8 +23,13 @@ import { DiarysService } from './diary.service';
 import { CreateDiaryDto } from './dtos/create-diary.dto';
 import { UpdateDiaryDto } from './dtos/update-diary.dto';
 import { Diary } from './entities/diary.entity';
+import { create } from 'domain';
 
+<<<<<<< HEAD
 @Controller('/api/diaries')
+=======
+@Controller('api/diary')
+>>>>>>> changhoon
 @ApiTags('Diary API')
 export class DiarysController {
   constructor(private diaryService: DiarysService) {}
@@ -58,8 +63,12 @@ export class DiarysController {
     }
   }
 
-  // 전체일기 중 클릭했을때 일기id와 일치하는 데이터 모두 얻기
-  // res data -> {diary_id: “”, title: “”, content: “”, weather: “”, emotion: “”, source: “”, date: “”}
+  @UseGuards(AccessTokenGuard)
+  @Get('dates')
+  async getDiariesList(@Req() req: Request) {
+    return this.diaryService.getCalendarDiary(req.user['userId']);
+  }
+
   @UseGuards(AccessTokenGuard)
   @Get('/:id')
   @ApiOperation({ summary: '일기 상세정보 API', description: '일기 상세정보 보기' })
@@ -67,6 +76,10 @@ export class DiarysController {
   getDiary(@Param('id') diaryId: number, @Req() req: Request) {
     return this.diaryService.getDiary(diaryId, req.user['userId']);
   }
+  // @UseGuards(AccessTokenGuard)
+  // @G
+  // 전체일기 중 클릭했을때 일기id와 일치하는 데이터 모두 얻기
+  // res data -> {diary_id: “”, title: “”, content: “”, weather: “”, emotion: “”, source: “”, date: “”}
 
   // 전체일기보기
   // 유저의 일기 중 생성일자와 보낸 year, month가 일치하는 모든 일기 그림 경로와 id데이터 가져오기
@@ -93,6 +106,7 @@ export class DiarysController {
   @ApiCreatedResponse({ description: '일기를 작성합니다.', type: Diary })
   @UsePipes(ValidationPipe)
   createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
+    console.log(createDiaryDto);
     return this.diaryService.createDiary(createDiaryDto, req);
   }
 

@@ -7,4 +7,8 @@ export class GetDiaryOutput extends CoreOutput {
   diary?: Diary;
 }
 
+<<<<<<< HEAD
 // export class GetAllDiaryOutput extends PickType(Diary, ['art']) {}
+=======
+
+>>>>>>> changhoon

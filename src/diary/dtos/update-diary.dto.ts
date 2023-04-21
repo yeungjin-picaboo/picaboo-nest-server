@@ -4,6 +4,6 @@ import { Entity } from 'typeorm';
 import { Diary } from '../entities/diary.entity';
 
 @Entity()
-export class UpdateDiaryDto extends PickType(Diary, ['title', 'content']) {}
+export class UpdateDiaryDto extends PickType(Diary, ['title', 'content', 'emotion', 'weather']) {}
 
 export class UpdateDiaryOutput extends CoreOutput {}

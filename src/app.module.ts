@@ -10,9 +10,12 @@ import { Diary } from './diary/entities/diary.entity';
 import { User } from './users/entities/user.entity';
 import { PictureModule } from './picture/picture.module';
 import { GoogleUserModule } from './google_user/google_user.module';
-import { WeatherModule } from './weather/weather.module';
+import { createPicture } from './picture/entities/create_picture.entity';
+import { DomainModuleModule } from './domain-module/domain-module.module';
 import { GoogleUser } from './google_user/entities/google_user.entity';
-import { join } from 'path';
+import { WeatherModule } from './weather-mood/weather-mood.module';
+import { QnaModule } from './qna/qna.module';
+import { Qna } from './qna/entities/qna.entity';
 
 @Module({
   imports: [
@@ -26,7 +29,12 @@ import { join } from 'path';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
+<<<<<<< HEAD
       entities: [User, Diary, GoogleUser],
+=======
+      entities: [User, Diary, GoogleUser, createPicture, Qna],
+      // "entities: [__dirname + '/**/*.entity{.ts,.js}'],"
+>>>>>>> changhoon
       synchronize: true
       // logging: true,
     }),
@@ -35,7 +43,9 @@ import { join } from 'path';
     DiarysModule,
     GoogleUserModule,
     WeatherModule,
-    PictureModule
+    PictureModule,
+    DomainModuleModule,
+    QnaModule
   ],
   controllers: [],
   providers: []
