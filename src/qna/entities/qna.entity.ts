@@ -20,9 +20,9 @@ export class Qna extends BaseEntity {
 
   @Column()
   @IsString()
-  nickName: string;
+  nickname: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNumber()
   answerId: number;
 

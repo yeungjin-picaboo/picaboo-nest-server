@@ -173,3 +173,7 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 .env.dev
+
+create_picture.sh
+
+*.png

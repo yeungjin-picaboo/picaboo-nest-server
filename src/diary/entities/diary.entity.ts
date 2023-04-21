@@ -25,15 +25,9 @@ export class Diary extends BaseEntity {
   @IsString()
   content: string;
 
-  @Column()
-  @ApiProperty({ description: 'Year' })
-  @IsNumber()
-  year: number;
-
-  @Column()
-  @ApiProperty({ description: 'Month' })
-  @IsNumber()
-  month: string;
+  @Column({ nullable: true })
+  @IsString()
+  date: string;
 
   @Column({ nullable: true })
   @IsString()
@@ -56,6 +50,6 @@ export class Diary extends BaseEntity {
   updatedAt: Date;
 
   //관계
-  @ManyToOne(() => User, user => user.id)
+  @ManyToOne(() => User, user => user.email)
   user: User;
 }

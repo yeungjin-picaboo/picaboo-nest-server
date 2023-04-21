@@ -7,7 +7,7 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number; //userId
 
-  @Column()
+  @Column({ unique: true })
   @IsEmail()
   email: string;
 
@@ -15,7 +15,7 @@ export class User extends BaseEntity {
   @IsString()
   password: string;
 
-  @Column()
+  @Column({ unique: true, nullable: true })
   @IsString()
   nickname: string;
 
