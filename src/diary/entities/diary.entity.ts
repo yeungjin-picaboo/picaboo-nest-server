@@ -26,21 +26,6 @@ export class Diary extends BaseEntity {
   content: string;
 
   @Column({ nullable: true })
-<<<<<<< HEAD
-  @ApiProperty({ description: 'Year' })
-  @IsNumber()
-  year: number;
-
-  // @Column()
-  // @ApiProperty({ description: 'ArtUrl' })
-  // @IsString()
-  // art: string;
-
-  @Column({ nullable: true })
-  @ApiProperty({ description: 'Month' })
-  @IsNumber()
-  month: string;
-=======
   @IsString()
   date: string;
 
@@ -55,7 +40,6 @@ export class Diary extends BaseEntity {
   @Column({ nullable: true })
   @IsString()
   source: string;
->>>>>>> changhoon
 
   @CreateDateColumn({ name: 'created_at', comment: '생성일' })
   @ApiProperty({ description: 'CreatedAt' })
