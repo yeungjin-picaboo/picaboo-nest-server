@@ -15,6 +15,9 @@ export class QnaRepository {
       take: page * 11,
       order: { id: 'ASC' }
     });
+    const test = await this.QnaRepository.find();
+    console.log(test);
+    console.log(qna);
     return qna;
   }
 
@@ -30,7 +33,7 @@ export class QnaRepository {
           title,
           content,
           isPrivate,
-          user: { nickname }
+          nickname
         })
       );
       if (!result) {
@@ -52,7 +55,7 @@ export class QnaRepository {
     try {
       const result = await this.QnaRepository.delete({
         id: question_id,
-        user: { nickname }
+        nickname
       });
 
       if (result.affected == 1) {
@@ -74,7 +77,7 @@ export class QnaRepository {
         id: question_id
       });
 
-      if (question.isPrivate && !this.verifyUser(nickname, question.user[nickname])) {
+      if (question.isPrivate && !this.verifyUser(nickname, nickname)) {
         // 비밀글일 때
         return '비밀글입니다 본인만 열람 가능합니다.';
       }
@@ -96,10 +99,7 @@ export class QnaRepository {
   async updateQuestion(question_id: number, nickname: string, updateQuestion: UpdateQuestionDto) {
     try {
       //
-      const result = await this.QnaRepository.update(
-        { id: question_id, user: { nickname } },
-        updateQuestion
-      );
+      const result = await this.QnaRepository.update({ id: question_id, nickname }, updateQuestion);
 
       if (result.affected == 0) {
         return '본인이 작성한 글만 수정할 수 있습니다';

@@ -14,16 +14,20 @@ export class AnswerRepository {
 
   async createAnswer(nickname, { content }, questionId) {
     try {
+      console.log('nickname :', nickname);
+      console.log('content :', content);
+      console.log('questionId :', questionId);
+
       const create = this.AnswerRepository.create({
-        user: { nickname },
-        question: { id: questionId },
+        nickname: nickname,
+        questionId,
         content
       });
       const result = await this.AnswerRepository.save(create);
 
       const question = await this.QuestionRepositroy.update(
         { id: questionId },
-        { answer: { id: create.id } }
+        { answerId: create.id }
       );
 
       if (!result) {

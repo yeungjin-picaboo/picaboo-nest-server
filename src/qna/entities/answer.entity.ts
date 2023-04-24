@@ -7,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -17,17 +18,18 @@ export class Answer extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   @IsString()
   content: string;
 
-  @ManyToOne(() => User, user => user.answer)
-  @JoinColumn({ referencedColumnName: 'nickname' })
-  user: User;
+  @Column({ nullable: false })
+  @IsString()
+  nickname: string;
 
+  @Column({ nullable: false })
+  @IsNumber()
   @OneToOne(() => Question, question => question.id)
-  @JoinColumn({ referencedColumnName: 'id' })
-  question: Question;
+  questionId: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
   createdAt: Date;

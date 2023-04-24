@@ -29,13 +29,14 @@ export class Question extends BaseEntity {
   @IsBoolean()
   isPrivate: boolean;
 
-  @ManyToOne(() => User, user => user.questions, { nullable: true })
-  @JoinColumn({ referencedColumnName: 'nickname' })
-  user: User;
+  @Column()
+  @IsString()
+  nickname: string;
 
+  @Column({ nullable: true })
   @OneToOne(() => Answer, answer => answer.id)
-  @JoinColumn({ referencedColumnName: 'id' })
-  answer: Answer;
+  @IsNumber()
+  answerId: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
   createdAt: Date;
