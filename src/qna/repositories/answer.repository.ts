@@ -3,21 +3,29 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Answer } from '../entities/answer.entity';
 import { returnMsg } from 'src/common/return.type';
+import { Question } from '../entities/question.entity';
 
 @Injectable()
 export class AnswerRepository {
-  constructor(@InjectRepository(Answer) private readonly AnswerRepository: Repository<Answer>) {}
+  constructor(
+    @InjectRepository(Answer) private readonly AnswerRepository: Repository<Answer>,
+    @InjectRepository(Question) private readonly QuestionRepositroy: Repository<Question>
+  ) {}
 
   async createAnswer(nickname, { content }, questionId) {
     try {
-      const result = await this.AnswerRepository.save(
-        this.AnswerRepository.create({
-          user: { nickname },
-          question: { id: questionId },
-          content
-        })
+      const create = this.AnswerRepository.create({
+        user: { nickname },
+        question: { id: questionId },
+        content
+      });
+      const result = await this.AnswerRepository.save(create);
+
+      const question = await this.QuestionRepositroy.update(
+        { id: questionId },
+        { answer: { id: create.id } }
       );
-      console.log('result : ', result);
+
       if (!result) {
         return returnMsg(false, 'failed to create answer');
       }
