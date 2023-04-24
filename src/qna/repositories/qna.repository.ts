@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Qna } from '../entities/qna.entity';
+import { Question } from '../entities/question.entity';
 import { Repository } from 'typeorm';
 import { CreateDiaryOutput } from 'src/diary/dtos/create-diary.dto';
 import { UpdateQuestionDto } from '../dto/update-diary.dto';
 
 @Injectable()
 export class QnaRepository {
-  constructor(@InjectRepository(Qna) private readonly QnaRepository: Repository<Qna>) {}
+  constructor(@InjectRepository(Question) private readonly QnaRepository: Repository<Question>) {}
 
-  async getAllQna(page): Promise<Array<Qna>> {
+  async getAllQna(page): Promise<Array<Question>> {
     const qna = await this.QnaRepository.find({
       skip: (page - 1) * 11,
       take: page * 11,
@@ -30,7 +30,7 @@ export class QnaRepository {
           title,
           content,
           isPrivate,
-          nickname
+          user: { nickname }
         })
       );
       if (!result) {
@@ -52,7 +52,7 @@ export class QnaRepository {
     try {
       const result = await this.QnaRepository.delete({
         id: question_id,
-        nickname
+        user: { nickname }
       });
 
       if (result.affected == 1) {
@@ -74,7 +74,7 @@ export class QnaRepository {
         id: question_id
       });
 
-      if (question.isPrivate && !this.verifyUser(nickname, question.nickname)) {
+      if (question.isPrivate && !this.verifyUser(nickname, question.user[nickname])) {
         // 비밀글일 때
         return '비밀글입니다 본인만 열람 가능합니다.';
       }
@@ -96,7 +96,10 @@ export class QnaRepository {
   async updateQuestion(question_id: number, nickname: string, updateQuestion: UpdateQuestionDto) {
     try {
       //
-      const result = await this.QnaRepository.update({ id: question_id, nickname }, updateQuestion);
+      const result = await this.QnaRepository.update(
+        { id: question_id, user: { nickname } },
+        updateQuestion
+      );
 
       if (result.affected == 0) {
         return '본인이 작성한 글만 수정할 수 있습니다';

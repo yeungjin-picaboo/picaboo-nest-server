@@ -5,6 +5,7 @@ import { DeleteDiaryOutput } from './dtos/delete-diary.dto';
 import { GetDiaryOutput } from './dtos/get-diary.dto';
 import { UpdateDiaryDto, UpdateDiaryOutput } from './dtos/update-diary.dto';
 import { DiarysRepository } from './repositories/diary.repository';
+import { returnMsg } from 'src/common/return.type';
 
 @Injectable()
 export class DiarysService {
@@ -39,10 +40,14 @@ export class DiarysService {
     try {
       console.log('user : ', req.user);
       console.log(createDiaryDto);
-      await this.diaryRepository.createDiary({
+
+      const diary = await this.diaryRepository.createDiary({
         ...createDiaryDto,
         userId: req.user['userId']
       });
+      if (diary == '이미 오늘 작성한 일기가 있습니다') {
+        return returnMsg(false, diary);
+      }
       console.log('Created Diary');
       return {
         ok: true

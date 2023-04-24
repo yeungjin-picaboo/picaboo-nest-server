@@ -1,4 +1,4 @@
 import { PickType } from '@nestjs/mapped-types';
-import { Qna } from '../entities/qna.entity';
+import { Question } from '../entities/question.entity';
 
-export class UpdateQuestionDto extends PickType(Qna, ['title', 'content', 'isPrivate']) {}
+export class UpdateQuestionDto extends PickType(Question, ['title', 'content', 'isPrivate']) {}

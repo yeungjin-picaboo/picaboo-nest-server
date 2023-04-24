@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from 
 import { QnaService } from './qna.service';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
-import { Qna } from './entities/qna.entity';
+import { Question } from './entities/question.entity';
 import { GetCreateQuestionDto } from './dto/qna.dto';
 import { Request } from 'express';
 import { UpdateQuestionDto } from './dto/update-diary.dto';
@@ -25,7 +25,7 @@ export class QnaController {
   @UseGuards(AccessTokenGuard)
   @Get('/page/:id')
   @ApiOperation({ summary: '전체 질문정보 Api', description: '질문 전체 정보 가져오기' })
-  @ApiCreatedResponse({ description: '전체 질문글을 가져옵니다', type: Qna })
+  @ApiCreatedResponse({ description: '전체 질문글을 가져옵니다', type: Question })
   async getAll(@Param('id') id: number) {
     return this.qnaService.getAllQna(id);
   }
@@ -42,7 +42,7 @@ export class QnaController {
   @UseGuards(AccessTokenGuard)
   @Post('')
   @ApiOperation({ summary: '질문 작성 Api', description: '질문을 생성합니다.' })
-  @ApiCreatedResponse({ description: '글을 작성합니다', type: Qna })
+  @ApiCreatedResponse({ description: '글을 작성합니다', type: Question })
   async createQuestion(@Body() createQuestion: GetCreateQuestionDto, @Req() req: Request) {
     return this.qnaService.createQna(createQuestion, req);
   }
@@ -50,7 +50,7 @@ export class QnaController {
   @UseGuards(AccessTokenGuard)
   @Get('/:questionId')
   @ApiOperation({ summary: '질문 상세 Api', description: '질문조회 합니다.' })
-  @ApiCreatedResponse({ description: '질문을 클릭했을시 나오는 상세페이지입니다.', type: Qna })
+  @ApiCreatedResponse({ description: '질문을 클릭했을시 나오는 상세페이지입니다.', type: Question })
   async showQuestion(@Param('questionId') questionId: number, @Req() req: Request) {
     return this.qnaService.showQuestion(questionId, req);
   }
@@ -58,19 +58,31 @@ export class QnaController {
   @UseGuards(AccessTokenGuard)
   @Delete('/:questionId')
   @ApiOperation({ summary: '질문 삭제 Api', description: '질문삭제 합니다.' })
-  @ApiCreatedResponse({ description: '질문을 삭제하는 api입니다.', type: Qna })
+  @ApiCreatedResponse({ description: '질문을 삭제하는 api입니다.', type: Question })
   async deleteQuestion(@Param('questionId') questionId: number, @Req() req: Request) {
     return this.qnaService.deleteQuestion(questionId, req);
   }
   @UseGuards(AccessTokenGuard)
   @Put('/:questionId')
-  @ApiOperation({ summary: '질문 삭제 Api', description: '질문삭제 합니다.' })
-  @ApiCreatedResponse({ description: '질문을 삭제하는 api입니다.', type: Qna })
+  @ApiOperation({ summary: '질문 수정 Api', description: '질문수정 합니다.' })
+  @ApiCreatedResponse({ description: '질문을 수정하는 api입니다.', type: Question })
   async updateQuestion(
     @Param('questionId') questionId: number,
     @Body() updateQuestion: UpdateQuestionDto,
     @Req() req: Request
   ) {
     return this.qnaService.updateQuestion(questionId, req, updateQuestion);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('/:questionId')
+  async createAnswer(
+    @Param('questionId') questionId: number,
+    @Body() content,
+    @Req() req: Request
+  ) {
+    console.log('questionId: ' + questionId);
+
+    return this.qnaService.createAnswer(questionId, content, req);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, Param } from '@nestjs/common';
+import { ConsoleLogger, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CustomRepository } from 'src/common/custom-repository.decorator';
 import { User } from 'src/users/entities/user.entity';
@@ -59,6 +59,14 @@ export class DiarysRepository {
   async createDiary({ title, content, emotion, weather, date, userId }) {
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
+
+      const findDiary = await this.verifyDiary(date, userId);
+
+      console.log('다이어리는 : ', findDiary);
+      if (findDiary.length == 1) {
+        return "이미 오늘 작성한 일기가 있습니다";
+      }
+
       const diary = await this.diaryRepository.save(
         this.diaryRepository.create({
           title,
@@ -69,11 +77,17 @@ export class DiarysRepository {
           user
         })
       );
-      console.log(diary);
+
       return diary;
     } catch (error) {
       return false;
     }
+  }
+
+  async verifyDiary(date: string, userId) {
+    const findDiary = await this.diaryRepository.find({ where: { user: { id: userId }, date } });
+
+    return findDiary;
   }
 
   async updateDiary(diaryId, updateDiaryDto: UpdateDiaryDto, userId) {

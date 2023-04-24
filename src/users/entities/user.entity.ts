@@ -1,6 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsString } from 'class-validator';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Answer } from 'src/qna/entities/answer.entity';
+import { Question } from 'src/qna/entities/question.entity';
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User extends BaseEntity {
@@ -22,4 +24,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   @Exclude()
   refreshToken: string;
+
+  @OneToMany(() => Question, question => question.user)
+  questions: Question[];
+
+  @OneToMany(() => Answer, answer => answer.user)
+  answer: Answer[];
 }
