@@ -28,7 +28,11 @@ export class QnaService {
   async showQuestion(question_id: number, req: Request) {
     //Question id , nickname
     const nickname = req.user['nickname'];
-    return this.qnaRepository.showQuestion(question_id, nickname);
+    const question = await this.qnaRepository.showQuestion(question_id, nickname);
+    console.log(question);
+    const answer = await this.answerRepository.showAnswer(question_id);
+    console.log(answer);
+    return { question, answer };
   }
   async deleteQuestion(question_id: number, req: Request) {
     const nickname = req.user['nickname'];

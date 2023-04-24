@@ -40,4 +40,13 @@ export class AnswerRepository {
       return returnMsg(false, 'unKnown error: ' + error);
     }
   }
+
+  async showAnswer(questionId) {
+    try {
+      const answer = await this.AnswerRepository.find(questionId);
+      return answer;
+    } catch (error) {
+      return error;
+    }
+  }
 }
