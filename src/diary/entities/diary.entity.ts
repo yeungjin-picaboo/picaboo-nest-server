@@ -6,6 +6,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -14,6 +15,11 @@ import {
 export class Diary extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number; //diaryId
+
+  @Column({ nullable: true })
+  @ApiProperty({ description: 'userId' })
+  @IsNumber()
+  userId: number;
 
   @Column()
   @ApiProperty({ description: 'Title' })
@@ -51,5 +57,6 @@ export class Diary extends BaseEntity {
 
   //관계
   @ManyToOne(() => User, user => user.email)
+  @JoinColumn()
   user: User;
 }

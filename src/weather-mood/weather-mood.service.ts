@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { GetCoordinateDto } from './dto/weahter.dto';
+import { GetWeatherDto } from './dto/weahter.dto';
 import { WeatherMoodRepository } from './repositories/weather-mood.repository';
 import { returnEmotionDto } from './dto/return-type-weather-mood.dto';
 
@@ -14,13 +14,15 @@ export class WeatherService {
    * @param weatherDto longtitde, latitude
    * @returns
    */
-  async getWeather(weatherDto: GetCoordinateDto): Promise<string> {
-    const { latitude, longitude } = weatherDto;
+  async getWeather(latitude: string, longitude: string): Promise<string> {
+    // const { latitude, longitude } = weatherDto;
     try {
       const weatherData = await axios.post(
         `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}&units=metric`
       );
       const { weather } = weatherData.data;
+      console.log('111111', weather[0].main);
+
       return weather[0].main;
     } catch (err) {
       console.log('error : ', err);
@@ -33,27 +35,27 @@ export class WeatherService {
    * @param moodDto content
    * @returns returnEmotionDto = { emotion }
    */
-  async getMood(content: string): Promise<returnEmotionDto> {
-    const client_id = process.env.CLOVA_CLIENT_ID;
-    const client_secret = process.env.CLOVA_SECRET;
-    const url = process.env.CLOVA_URL;
+  // async getMood(content: string): Promise<returnEmotionDto> {
+  //   const client_id = process.env.CLOVA_CLIENT_ID;
+  //   const client_secret = process.env.CLOVA_SECRET;
+  //   const url = process.env.CLOVA_URL;
 
-    const headers = {
-      'X-NCP-APIGW-API-KEY-ID': client_id,
-      'X-NCP-APIGW-API-KEY': client_secret,
-      'Content-Type': 'application/json'
-    };
-    // const { content } = diary;
+  //   const headers = {
+  //     'X-NCP-APIGW-API-KEY-ID': client_id,
+  //     'X-NCP-APIGW-API-KEY': client_secret,
+  //     'Content-Type': 'application/json'
+  //   };
+  //   // const { content } = diary;
 
-    const data = { content };
+  //   const data = { content };
 
-    try {
-      let test = await axios.post(url, data, { headers });
-      let emotionDto: returnEmotionDto = test.data.document.sentiment;
+  //   try {
+  //     let test = await axios.post(url, data, { headers });
+  //     let emotionDto: returnEmotionDto = test.data.document.sentiment;
 
-      return emotionDto;
-    } catch (error) {
-      return error;
-    }
-  }
+  //     return emotionDto;
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // }
 }

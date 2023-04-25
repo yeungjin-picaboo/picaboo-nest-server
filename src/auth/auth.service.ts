@@ -68,6 +68,7 @@ export class AuthService {
   }
 
   async getTokens(payload: { userId: number; nickname: string }) {
+    // payload 값 넣어주는 부분
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         expiresIn: 60,
