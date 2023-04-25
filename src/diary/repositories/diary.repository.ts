@@ -1,5 +1,6 @@
 import { Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import axios from 'axios';
 import { CustomRepository } from 'src/common/custom-repository.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -58,21 +59,20 @@ export class DiarysRepository {
 
   async createDiary({ title, content, emotion, weather, date, userId }) {
     try {
-      const user = await this.userRepository.findOneBy({ id: userId });
-      const diary = await this.diaryRepository.save(
-        this.diaryRepository.create({
-          title,
-          content,
-          emotion,
-          weather,
-          date,
-          user
-        })
-      );
-      console.log(diary);
+      // const user = await this.userRepository.findOneBy({ id: userId });
+      const diary = await this.diaryRepository.save({
+        title,
+        content,
+        emotion,
+        weather,
+        date,
+        userId
+      });
+
       return diary;
     } catch (error) {
-      return false;
+      // return false;
+      throw new Error('error');
     }
   }
 
@@ -127,4 +127,12 @@ export class DiarysRepository {
       return { ok: false, message: '작성한 글이 없습니다.' };
     }
   }
+
+  async saveImage(id: number, source: string) {
+    await this.diaryRepository.update(id, { source });
+  }
+
+  // async saveWeather(id: number, weather: string) {
+  //   await this.diaryRepository.update(id, { weather });
+  // }
 }

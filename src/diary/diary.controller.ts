@@ -19,44 +19,32 @@ import { Request } from 'express';
 import { clearConfigCache } from 'prettier';
 import { generate } from 'rxjs';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
+import { GetWeatherDto } from 'src/weather-mood/dto/weahter.dto';
+import { WeatherService } from 'src/weather-mood/weather-mood.service';
 import { DiarysService } from './diary.service';
-import { CreateDiaryDto } from './dtos/create-diary.dto';
+import { CreateDiaryDto, DiaryDto, WeatherEmotion } from './dtos/create-diary.dto';
 import { UpdateDiaryDto } from './dtos/update-diary.dto';
 import { Diary } from './entities/diary.entity';
-import { create } from 'domain';
+
+interface test {
+  content: string;
+  latitude: string;
+  longitude: string;
+}
 
 @Controller('api/diary')
 @ApiTags('Diary API')
 export class DiarysController {
-  constructor(private diaryService: DiarysService) {}
+  constructor(private diaryService: DiarysService, private weatherService: WeatherService) {}
   @UseGuards(AccessTokenGuard)
-  @Get('/picture')
-  @ApiOperation({ summary: 'prompt로 그림 생성 API', description: '그림 생성하기' })
-  @ApiCreatedResponse({ description: '내가 작성한 Text를 Image화 합니다.' })
-  async getImageUrl(@Body() image: any): Promise<any> {
-    try {
-      const imageURL = `http://172.21.4.175:9000/api/diaries/picture/${image.Prompt}`;
-      const responseAi = await axios.get(imageURL);
-      const urlData = responseAi.data;
-      return urlData;
-    } catch (error) {
-      return { error: 'Failed to get image URL' };
-    }
-  }
+  @Post('/meta')
+  // @ApiOperation({ summary: '감정,위도,경도', description: '위도경도감정' })
+  // @ApiCreatedResponse({ description: '날씨 감정' })
+  async summarizeDiary(@Body() dto: test): Promise<any> {
+    const emotion = await this.diaryService.getEmotion(dto.content);
+    const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
 
-  @UseGuards(AccessTokenGuard)
-  @Get('/emotion')
-  async summarizeDiary(@Body() diary: any): Promise<any> {
-    try {
-      const emotionURL = `http://172.21.4.175:9000/api/diaries/emotion/${diary.content}`;
-      const responseAI = await axios.get(emotionURL);
-      const urlData = responseAI.data;
-      console.log(urlData);
-
-      return urlData;
-    } catch (error) {
-      return { error: 'Failed to get content' };
-    }
+    return { emotion, weather };
   }
 
   @UseGuards(AccessTokenGuard)
@@ -101,9 +89,11 @@ export class DiarysController {
   @ApiOperation({ summary: '일기 작성 API', description: '일기 작성하기' })
   @ApiCreatedResponse({ description: '일기를 작성합니다.', type: Diary })
   @UsePipes(ValidationPipe)
-  createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
-    console.log(createDiaryDto);
-    return this.diaryService.createDiary(createDiaryDto, req);
+  async createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
+    // console.log(createDiaryDto);
+    const diary = await this.diaryService.createDiary(createDiaryDto, req);
+    const source = await this.diaryService.createImage(diary.content);
+    await this.diaryService.saveImage(diary.id, source);
   }
 
   @UseGuards(AccessTokenGuard)

@@ -9,6 +9,7 @@ import { SharedRepository } from 'src/domain-module/shared-repository/getIdByCon
 @Module({
   imports: [TypeOrmModule.forFeature([Diary])],
   controllers: [WeatherController],
+  exports: [WeatherService, WeatherMoodRepository],
   providers: [WeatherService, WeatherMoodRepository, SharedRepository]
 })
 export class WeatherModule {}
