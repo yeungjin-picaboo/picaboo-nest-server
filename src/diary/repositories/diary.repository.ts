@@ -23,8 +23,9 @@ export class DiarysRepository {
         .createQueryBuilder('diary')
         .where(`diary.date LIKE :datePattern`, { datePattern: `${date}-%` })
         .andWhere(`diary.userId = :userId`, { userId })
-        .orderBy({ id: 'ASC' })
+        .orderBy({ diary_id: 'ASC' })
         .getMany();
+      console.log(query);
 
       if (!query) {
         return 'You dont have diary';
@@ -44,7 +45,10 @@ export class DiarysRepository {
 
   async getDiary(diaryId, userId) {
     try {
-      const diary = await this.diaryRepository.findOneBy({ id: diaryId, user: { id: userId } });
+      const diary = await this.diaryRepository.findOneBy({
+        diary_id: diaryId,
+        user: { id: userId }
+      });
 
       if (!diary) {
         return 'You dont have diary';
@@ -101,7 +105,10 @@ export class DiarysRepository {
 
   async updateDiary(diaryId, updateDiaryDto: UpdateDiaryDto, userId) {
     try {
-      const diary = await this.diaryRepository.findOneBy({ id: diaryId, user: { id: userId } });
+      const diary = await this.diaryRepository.findOneBy({
+        diary_id: diaryId,
+        user: { id: userId }
+      });
 
       if (!diary) {
         return false;
@@ -117,7 +124,10 @@ export class DiarysRepository {
   }
 
   async deleteDiary({ diaryId, userId }) {
-    const deleteDiary = await this.diaryRepository.delete({ id: diaryId, user: { id: userId } });
+    const deleteDiary = await this.diaryRepository.delete({
+      diary_id: diaryId,
+      user: { id: userId }
+    });
     if (deleteDiary.affected === 0) {
       return false;
     }
@@ -140,7 +150,7 @@ export class DiarysRepository {
       let sortingArr = []; // 정렬해서 보내줄
       getUserDiary.map(e => {
         // sortingArr.push(Number(e.date.split('-')[2]));
-        returnArr.push({ id: e.id, date: e.date });
+        returnArr.push({ id: e.diary_id, date: e.date });
       });
       // returnArr.sort((a, b) => a.id - b.id);
 

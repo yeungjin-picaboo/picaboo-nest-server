@@ -14,18 +14,47 @@ export class WeatherService {
    * @param weatherDto longtitde, latitude
    * @returns
    */
-  async getWeather(latitude: string, longitude: string): Promise<string> {
+  async getWeather(latitude: string, longitude: string): Promise<string | undefined> {
     // const { latitude, longitude } = weatherDto;
     try {
+      console.log(latitude);
+      console.log(longitude);
+
       const weatherData = await axios.post(
         `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}&units=metric`
       );
       const { weather } = weatherData.data;
-      console.log('111111', weather[0].main);
+      console.log(weather[0].main);
+      const changeWeather = weather[0].main;
+      function weatherConverter(changeWeather): string {
+        switch (changeWeather) {
+          case 'Clear':
+            return 'sunny';
+          case 'Drizzle':
+          case 'Rain':
+          case 'Thunderstorm':
+            return 'rainy';
+          case 'Snow':
+            return 'snowy';
+          case 'Clouds':
+          case 'Mist':
+          case 'Smoke':
+          case 'Haze':
+          case 'Dust':
+          case 'Fog':
+          case 'Sand':
+          case 'Ash':
+          case 'Squall':
+          case 'Tornado':
+            return 'cloudy';
+          default:
+            return 'windy';
+        }
+      }
 
-      return weather[0].main;
+      return weatherConverter(changeWeather);
     } catch (err) {
-      console.log('error : ', err);
+      console.log('error : ', err.request.data);
     }
   }
 

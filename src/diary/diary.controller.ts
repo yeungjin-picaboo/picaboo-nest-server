@@ -70,8 +70,8 @@ export class DiarysController {
 
     @Req() req: Request
   ) {
-    console.log('year', year);
-    console.log('month', month);
+    // console.log('year', year);
+    // console.log('month', month);
 
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
     
@@ -85,8 +85,9 @@ export class DiarysController {
   async createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
     // console.log(createDiaryDto);
     const diary = await this.diaryService.createDiary(createDiaryDto, req);
-    const source = await this.diaryService.createImage(diary.content);
-    await this.diaryService.saveImage(diary.id, source);
+    // const source = await this.diaryService.createImage(diary.content);
+    // await this.diaryService.saveImage(diary.id, source);
+    return diary;
   }
 
   @UseGuards(AccessTokenGuard)

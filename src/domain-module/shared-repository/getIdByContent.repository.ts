@@ -12,6 +12,6 @@ export class SharedRepository implements SharedRepository {
   async getIdByContent(dto: CreateWeatherDto): Promise<number> {
     const { content } = dto;
     const entity = await this.weatherRepository.findOneBy({ content });
-    return entity?.id;
+    return entity?.diary_id;
   } // content로 id를 조회하는 쿼리
 }

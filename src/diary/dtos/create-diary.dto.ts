@@ -12,7 +12,7 @@ export class CreateDiaryDto extends PickType(Diary, [
 ]) {} // 일기 생성 DB
 
 export class DiaryDto extends PickType(Diary, [
-  'id',
+  'diary_id',
   'userId',
   'title',
   'content',
@@ -21,7 +21,7 @@ export class DiaryDto extends PickType(Diary, [
   'weather'
 ]) {} // 일기 생성 DB
 
-export class WeatherEmotion extends PickType(Diary, ['id', 'content']) {} // 일기 생성 DB
+export class WeatherEmotion extends PickType(Diary, ['diary_id', 'content']) {} // 일기 생성 DB
 
 export class CreateEmotionDto extends PickType(Diary, ['content', 'title']) {}
 
