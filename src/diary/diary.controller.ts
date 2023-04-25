@@ -36,11 +36,15 @@ export class DiarysController {
   // @ApiOperation({ summary: '감정,위도,경도', description: '위도경도감정' })
   // @ApiCreatedResponse({ description: '날씨 감정' })
   async getEmotionWeather(@Body() dto: Weather): Promise<any> {
-    const emotion = await this.diaryService.getEmotion(dto.content);
-    // const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
+    console.log(dto);
 
-    // return { emotion, weather };
-    return emotion;
+    const emotion = await this.diaryService.getEmotion(dto.content);
+    const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
+    console.log(emotion);
+    console.log(weather);
+
+    return { emotion, weather };
+    // return emotion;
   }
 
   @UseGuards(AccessTokenGuard)
@@ -70,8 +74,8 @@ export class DiarysController {
 
     @Req() req: Request
   ) {
-    console.log('year', year);
-    console.log('month', month);
+    // console.log('year', year);
+    // console.log('month', month);
 
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
   }
@@ -84,8 +88,9 @@ export class DiarysController {
   async createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
     // console.log(createDiaryDto);
     const diary = await this.diaryService.createDiary(createDiaryDto, req);
-    const source = await this.diaryService.createImage(diary.content);
-    await this.diaryService.saveImage(diary.id, source);
+    // const source = await this.diaryService.createImage(diary.content);
+    // await this.diaryService.saveImage(diary.id, source);
+    return diary;
   }
 
   @UseGuards(AccessTokenGuard)

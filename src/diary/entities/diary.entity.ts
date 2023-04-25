@@ -14,7 +14,7 @@ import {
 @Entity()
 export class Diary extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number; //diaryId
+  diary_id: number; //diaryId
 
   @Column({ nullable: true })
   @ApiProperty({ description: 'userId' })
