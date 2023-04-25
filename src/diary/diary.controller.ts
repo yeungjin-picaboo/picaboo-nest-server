@@ -17,7 +17,7 @@ import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import axios from 'axios';
 import { Request } from 'express';
 import { clearConfigCache } from 'prettier';
-import { generate } from 'rxjs';
+import { generate, retry } from 'rxjs';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
 import { GetWeatherDto } from 'src/weather-mood/dto/weahter.dto';
 import { WeatherService } from 'src/weather-mood/weather-mood.service';
@@ -25,12 +25,7 @@ import { DiarysService } from './diary.service';
 import { CreateDiaryDto, DiaryDto, WeatherEmotion } from './dtos/create-diary.dto';
 import { UpdateDiaryDto } from './dtos/update-diary.dto';
 import { Diary } from './entities/diary.entity';
-
-interface test {
-  content: string;
-  latitude: string;
-  longitude: string;
-}
+import { Weather } from './dtos/create-diary.dto';
 
 @Controller('api/diary')
 @ApiTags('Diary API')
@@ -40,15 +35,16 @@ export class DiarysController {
   @Post('/meta')
   // @ApiOperation({ summary: '감정,위도,경도', description: '위도경도감정' })
   // @ApiCreatedResponse({ description: '날씨 감정' })
-  async summarizeDiary(@Body() dto: test): Promise<any> {
+  async getEmotionWeather(@Body() dto: Weather): Promise<any> {
     const emotion = await this.diaryService.getEmotion(dto.content);
-    const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
+    // const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
 
-    return { emotion, weather };
+    // return { emotion, weather };
+    return emotion;
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get('dates')
+  @Get('/dates')
   async getDiariesList(@Req() req: Request) {
     return this.diaryService.getCalendarDiary(req.user['userId']);
   }
@@ -60,14 +56,7 @@ export class DiarysController {
   getDiary(@Param('id') diaryId: number, @Req() req: Request) {
     return this.diaryService.getDiary(diaryId, req.user['userId']);
   }
-  // @UseGuards(AccessTokenGuard)
-  // @G
-  // 전체일기 중 클릭했을때 일기id와 일치하는 데이터 모두 얻기
-  // res data -> {diary_id: “”, title: “”, content: “”, weather: “”, emotion: “”, source: “”, date: “”}
 
-  // 전체일기보기
-  // 유저의 일기 중 생성일자와 보낸 year, month가 일치하는 모든 일기 그림 경로와 id데이터 가져오기
-  // res data -> [{diary_id: “”, source: “”},{diary_id: “”, source: “”},
   @UseGuards(AccessTokenGuard)
   @Get('/years/:year/months/:month')
   @ApiOperation({ summary: '일기 전체정보 API', description: '일기 전체정보 보기' })
@@ -81,6 +70,9 @@ export class DiarysController {
 
     @Req() req: Request
   ) {
+    console.log('year', year);
+    console.log('month', month);
+
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
   }
 
