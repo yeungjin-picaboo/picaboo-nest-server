@@ -6,3 +6,12 @@ export class CoreOutput {
   error?: string;
   message?: string;
 }
+
+function returnMsg(ok: boolean, message: string) {
+  return {
+    ok,
+    message
+  };
+}
+
+export { returnMsg };

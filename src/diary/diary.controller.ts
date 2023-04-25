@@ -86,10 +86,12 @@ export class DiarysController {
   @ApiCreatedResponse({ description: '일기를 작성합니다.', type: Diary })
   @UsePipes(ValidationPipe)
   async createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
-    // console.log(createDiaryDto);
+    console.log(createDiaryDto);
     const diary = await this.diaryService.createDiary(createDiaryDto, req);
-    // const source = await this.diaryService.createImage(diary.content);
-    // await this.diaryService.saveImage(diary.id, source);
+    const source = await this.diaryService.createImage(diary.content);
+    console.log('diary.id:', diary.diary_id);
+
+    await this.diaryService.saveImage(diary.diary_id, source);
     return diary;
   }
 

@@ -64,6 +64,15 @@ export class DiarysRepository {
   async createDiary({ title, content, emotion, weather, date, userId }) {
     try {
       // const user = await this.userRepository.findOneBy({ id: userId });
+      console.log('createDiary 1111');
+
+      const findDiary = await this.verifyDiary(date, userId);
+
+      console.log('다이어리는 : ', findDiary);
+      if (findDiary.length == 1) {
+        return '이미 오늘 작성한 일기가 있습니다';
+      }
+
       const diary = await this.diaryRepository.save({
         title,
         content,
@@ -72,12 +81,19 @@ export class DiarysRepository {
         date,
         userId
       });
+      console.log(diary);
 
       return diary;
     } catch (error) {
       // return false;
       throw new Error('error');
     }
+  }
+
+  async verifyDiary(date: string, userId) {
+    const findDiary = await this.diaryRepository.find({ where: { user: { id: userId }, date } });
+
+    return findDiary;
   }
 
   async updateDiary(diaryId, updateDiaryDto: UpdateDiaryDto, userId) {
@@ -138,8 +154,8 @@ export class DiarysRepository {
     }
   }
 
-  async saveImage(id: number, source: string) {
-    await this.diaryRepository.update(id, { source });
+  async saveImage(diary_id: number, source: string) {
+    await this.diaryRepository.update(diary_id, { source });
   }
 
   // async saveWeather(id: number, weather: string) {

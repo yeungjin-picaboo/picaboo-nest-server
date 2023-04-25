@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 import { Request } from 'express';
+import { returnMsg } from 'src/common/dto/output.dto';
 import { CreateDiaryDto, CreateDiaryOutput, DiaryDto } from './dtos/create-diary.dto';
 import { DeleteDiaryOutput } from './dtos/delete-diary.dto';
 import { GetDiaryOutput } from './dtos/get-diary.dto';
@@ -38,7 +39,7 @@ export class DiarysService {
     }
   }
 
-  async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<DiaryDto> {
+  async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<any> {
     try {
       // console.log('user : ', req.user);
       // console.log(createDiaryDto);
@@ -46,6 +47,9 @@ export class DiarysService {
         ...createDiaryDto,
         userId: req.user['userId']
       });
+      if (diary == '이미 오늘 작성한 일기가 있습니다') {
+        return returnMsg(false, diary);
+      }
       console.log('Created Diary');
       return diary;
       // return {
@@ -124,8 +128,11 @@ export class DiarysService {
     }
   }
 
-  async saveImage(id: number, source: string) {
-    await this.diaryRepository.saveImage(id, source);
+  async saveImage(diary_id: number, source: string) {
+    console.log('id', diary_id);
+    console.log('source', source);
+
+    await this.diaryRepository.saveImage(diary_id, source);
   }
 
   // async saveWeather(id: number, weather: string) {
