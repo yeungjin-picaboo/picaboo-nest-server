@@ -27,7 +27,7 @@ export class WeatherService {
       console.log(weather[0].main);
       const changeWeather = weather[0].main;
       function weatherConverter(changeWeather): string {
-        switch (weather) {
+        switch (changeWeather) {
           case 'Clear':
             return 'sunny';
           case 'Drizzle':
