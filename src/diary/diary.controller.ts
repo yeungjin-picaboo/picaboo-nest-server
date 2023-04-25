@@ -37,10 +37,10 @@ export class DiarysController {
   // @ApiCreatedResponse({ description: '날씨 감정' })
   async getEmotionWeather(@Body() dto: Weather): Promise<any> {
     const emotion = await this.diaryService.getEmotion(dto.content);
-    // const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
+    const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
 
-    // return { emotion, weather };
-    return emotion;
+    return { emotion, weather };
+    // return emotion;
   }
 
   @UseGuards(AccessTokenGuard)
@@ -74,6 +74,7 @@ export class DiarysController {
     console.log('month', month);
 
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
+    
   }
 
   @UseGuards(AccessTokenGuard)

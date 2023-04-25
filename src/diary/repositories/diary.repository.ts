@@ -19,8 +19,6 @@ export class DiarysRepository {
 
   async getAllDiary(userId, date) {
     try {
-      console.log(JSON.stringify(date));
-      console.log(`${date}-%`);
       const query = await this.diaryRepository
         .createQueryBuilder('diary')
         .where(`diary.date LIKE :datePattern`, { datePattern: `${date}-%` })
@@ -59,7 +57,7 @@ export class DiarysRepository {
 
   async createDiary({ title, content, emotion, weather, date, userId }) {
     try {
-      const user = await this.userRepository.findOneBy({ id: userId });
+      // const user = await this.userRepository.findOneBy({ id: userId });
 
       const findDiary = await this.verifyDiary(date, userId);
 
@@ -154,6 +152,8 @@ export class DiarysRepository {
   }
 
   async saveImage(id: number, source: string) {
+    console.log('id : ', id);
+    console.log('source : ', source);
     await this.diaryRepository.update(id, { source });
   }
 
