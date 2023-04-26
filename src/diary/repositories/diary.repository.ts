@@ -25,7 +25,7 @@ export class DiarysRepository {
         .createQueryBuilder('diary')
         .where(`diary.date LIKE :datePattern`, { datePattern: `${date}-%` })
         .andWhere(`diary.userId = :userId`, { userId })
-        .orderBy({ diary_id: 'ASC' })
+        .orderBy({ diary_id: 'DESC' })
         .getMany();
       console.log(query);
 

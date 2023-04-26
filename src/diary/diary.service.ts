@@ -13,7 +13,7 @@ export class DiarysService {
   constructor(private readonly diaryRepository: DiarysRepository) {}
 
   async getAllDiary(userId, year, month) {
-    const date = year + '-0' + month;
+    const date = year + '-' + month;
     console.log(date);
 
     try {
@@ -117,7 +117,7 @@ export class DiarysService {
 
   async createImage(content: string) {
     try {
-      const imageURL = `http://172.21.4.175:9000/api/diaries/picture/${content}`;
+      const imageURL = `http://192.168.0.223:9000/api/diaries/picture/${content}`;
       const responseAi = await axios.get(imageURL);
       const imgName = responseAi.data;
       console.log(content);
@@ -141,10 +141,10 @@ export class DiarysService {
 
   async getEmotion(content: string) {
     try {
-      const emotionURL = `http://172.21.4.175:9000/api/diaries/emotion/${content}`;
+      const emotionURL = `http://192.168.0.223:9000/api/diaries/emotion/${content}`;
       const responseAI = await axios.get(emotionURL);
       const emotion = responseAI.data;
-      console.log(emotion);
+      console.log('service emotion:', emotion);
 
       return emotion;
     } catch (error) {

@@ -33,18 +33,17 @@ export class DiarysController {
   constructor(private diaryService: DiarysService, private weatherService: WeatherService) {}
   @UseGuards(AccessTokenGuard)
   @Post('/meta')
-  // @ApiOperation({ summary: '감정,위도,경도', description: '위도경도감정' })
-  // @ApiCreatedResponse({ description: '날씨 감정' })
+  @ApiOperation({ summary: '감정,위도,경도', description: '위도경도감정' })
+  @ApiCreatedResponse({ description: '날씨 감정' })
   async getEmotionWeather(@Body() dto: Weather): Promise<any> {
-    console.log(dto);
+    console.log('dto:', dto);
 
     const emotion = await this.diaryService.getEmotion(dto.content);
     const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
-    console.log(emotion);
-    console.log(weather);
+    console.log('emotion:', emotion);
+    console.log('weather:', weather);
 
     return { emotion, weather };
-    // return emotion;
   }
 
   @UseGuards(AccessTokenGuard)
@@ -74,8 +73,8 @@ export class DiarysController {
 
     @Req() req: Request
   ) {
-    // console.log('year', year);
-    // console.log('month', month);
+    console.log('month:', month);
+    console.log('year:', year);
 
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
   }
@@ -86,7 +85,7 @@ export class DiarysController {
   @ApiCreatedResponse({ description: '일기를 작성합니다.', type: Diary })
   @UsePipes(ValidationPipe)
   async createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
-    console.log(createDiaryDto);
+    console.log('dto:', createDiaryDto);
     const diary = await this.diaryService.createDiary(createDiaryDto, req);
     const source = await this.diaryService.createImage(diary.content);
     console.log('diary.id:', diary.diary_id);
@@ -112,7 +111,9 @@ export class DiarysController {
     @Body() updateDiaryDto: UpdateDiaryDto,
     @Req() req: Request
   ) {
-    console.log(updateDiaryDto);
+    console.log('update', updateDiaryDto);
+    console.log('user', req.user['userId']);
+
     return this.diaryService.updateDiary(diaryId, req.user['userId'], updateDiaryDto);
   }
 }
