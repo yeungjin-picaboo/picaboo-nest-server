@@ -94,7 +94,10 @@ export class DiarysRepository {
 
   async updateDiary(diary_id, updateDiaryDto: UpdateDiaryDto, userId) {
     try {
-      const diary = await this.diaryRepository.update({ diary_id, userId }, updateDiaryDto);
+      const diary = await this.diaryRepository.update(
+        { diary_id, userId },
+        { source: null, ...updateDiaryDto }
+      );
 
       if (!diary) {
         return false;

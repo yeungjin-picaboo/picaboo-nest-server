@@ -53,7 +53,7 @@ export class DiarysService {
       });
       console.log('외부의', diary);
       if (diary == '이미 오늘 작성한 일기가 있습니다') {
-        return returnMsg(false, diary);
+        return returnMsg(false, "안됨");
       }
       console.log('Created Diary');
       return diary;
@@ -122,7 +122,7 @@ export class DiarysService {
 
   async createImage(content: string) {
     try {
-      const imageURL = `http://172.21.4.175:9000/api/diaries/picture/${content}`;
+      const imageURL = `http://192.168.0.223:9000/api/diaries/picture/${content}`;
       const responseAi = await axios.get(imageURL);
       const imgName = responseAi.data;
       console.log(content);
@@ -143,7 +143,7 @@ export class DiarysService {
 
   async getEmotion(content: string) {
     try {
-      const emotionURL = `http://172.21.4.175:9000/api/diaries/emotion/${content}`;
+      const emotionURL = `http://192.168.0.223:9000/api/diaries/emotion/${content}`;
       const responseAI = await axios.get(emotionURL);
       const emotion = responseAI.data;
       console.log(emotion);

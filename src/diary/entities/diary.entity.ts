@@ -56,7 +56,9 @@ export class Diary extends BaseEntity {
   updatedAt: Date;
 
   //관계
-  @ManyToOne(() => User, user => user.email)
+  @ManyToOne(() => User, user => user.email, {
+    onDelete: 'CASCADE'
+  })
   @JoinColumn()
   user: User;
 }

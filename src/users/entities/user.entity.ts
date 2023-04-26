@@ -25,9 +25,13 @@ export class User extends BaseEntity {
   @Exclude()
   refreshToken: string;
 
-  @OneToMany(() => Question, question => question.nickname)
+  @OneToMany(() => Question, question => question.nickname, {
+    cascade: true
+  })
   questions: Question[];
 
-  @OneToMany(() => Answer, answer => answer.nickname)
+  @OneToMany(() => Answer, answer => answer.nickname, {
+    cascade: true
+  })
   answers: Answer[];
 }
