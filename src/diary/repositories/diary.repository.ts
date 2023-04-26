@@ -59,7 +59,7 @@ export class DiarysRepository {
     }
   }
 
-  async createDiary({ title, content, emotion, weather, date, userId }) {
+  async createDiary({ title, content, emotion, weather, date, userId }): Promise<Diary | string> {
     try {
       // const user = await this.userRepository.findOneBy({ id: userId });
 
@@ -70,17 +70,6 @@ export class DiarysRepository {
         return '이미 오늘 작성한 일기가 있습니다';
       }
 
-      // const diary = await this.diaryRepository.save(
-      //   this.diaryRepository.create({
-      //     title,
-      //     content,
-      //     emotion,
-      //     weather,
-      //     date,
-      //     user
-      //   })
-      // );
-      // const user = await this.userRepository.findOneBy({ id: userId });
       const diary = await this.diaryRepository.save({
         title,
         content,
@@ -103,21 +92,13 @@ export class DiarysRepository {
     return findDiary;
   }
 
-  async updateDiary(diaryId, updateDiaryDto: UpdateDiaryDto, userId) {
+  async updateDiary(diary_id, updateDiaryDto: UpdateDiaryDto, userId) {
     try {
-      const diary = await this.diaryRepository.findOneBy({
-        diary_id: diaryId,
-        user: { id: userId }
-      });
+      const diary = await this.diaryRepository.update({ diary_id, userId }, updateDiaryDto);
 
       if (!diary) {
         return false;
       }
-
-      return this.diaryRepository.save({
-        id: diaryId,
-        ...updateDiaryDto
-      });
     } catch (error) {
       return false;
     }
@@ -161,10 +142,10 @@ export class DiarysRepository {
     }
   }
 
-  async saveImage(id: number, source: string) {
-    console.log('id : ', id);
+  async saveImage(diary_id: number, source: string) {
+    console.log('diary_id : ', diary_id);
     console.log('source : ', source);
-    await this.diaryRepository.update(id, { source });
+    await this.diaryRepository.update(diary_id, { source });
   }
 
   // async saveWeather(id: number, weather: string) {

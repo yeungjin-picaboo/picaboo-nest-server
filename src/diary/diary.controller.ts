@@ -74,7 +74,6 @@ export class DiarysController {
     // console.log('month', month);
 
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
-    
   }
 
   @UseGuards(AccessTokenGuard)
@@ -85,8 +84,8 @@ export class DiarysController {
   async createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
     // console.log(createDiaryDto);
     const diary = await this.diaryService.createDiary(createDiaryDto, req);
-    // const source = await this.diaryService.createImage(diary.content);
-    // await this.diaryService.saveImage(diary.id, source);
+    const source = await this.diaryService.createImage(diary.content);
+    await this.diaryService.saveImage(diary.diary_id, source);
     return diary;
   }
 
@@ -108,6 +107,9 @@ export class DiarysController {
     @Req() req: Request
   ) {
     console.log(updateDiaryDto);
-    return this.diaryService.updateDiary(diaryId, req.user['userId'], updateDiaryDto);
+
+    await this.diaryService.updateDiary(diaryId, req.user['userId'], updateDiaryDto);
+    const source = await this.diaryService.createImage(updateDiaryDto.content); // 그림 생성
+    await this.diaryService.saveImage(diaryId, source);
   }
 }

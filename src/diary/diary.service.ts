@@ -7,13 +7,14 @@ import { GetDiaryOutput } from './dtos/get-diary.dto';
 import { UpdateDiaryDto, UpdateDiaryOutput } from './dtos/update-diary.dto';
 import { DiarysRepository } from './repositories/diary.repository';
 import { returnMsg } from 'src/common/return.type';
+import { Diary } from './entities/diary.entity';
 
 @Injectable()
 export class DiarysService {
   constructor(private readonly diaryRepository: DiarysRepository) {}
 
   async getAllDiary(userId, year, month) {
-    const date = year + '-0' + month;
+    const date = year + '-' + month;
     console.log(date);
 
     try {
@@ -39,7 +40,10 @@ export class DiarysService {
     }
   }
 
-  async createDiary(createDiaryDto: CreateDiaryDto, req: Request): Promise<any> {
+  async createDiary(
+    createDiaryDto: CreateDiaryDto,
+    req: Request
+  ): Promise<Diary | { ok; message } | any> {
     try {
       // console.log('user : ', req.user);
       // console.log(createDiaryDto);
@@ -47,6 +51,7 @@ export class DiarysService {
         ...createDiaryDto,
         userId: req.user['userId']
       });
+      console.log('외부의', diary);
       if (diary == '이미 오늘 작성한 일기가 있습니다') {
         return returnMsg(false, diary);
       }
@@ -128,8 +133,8 @@ export class DiarysService {
     }
   }
 
-  async saveImage(id: number, source: string) {
-    await this.diaryRepository.saveImage(id, source);
+  async saveImage(diary_id: number, source: string) {
+    await this.diaryRepository.saveImage(diary_id, source);
   }
 
   // async saveWeather(id: number, weather: string) {
