@@ -17,8 +17,8 @@ export class WeatherService {
   async getWeather(latitude: string, longitude: string): Promise<string | undefined> {
     // const { latitude, longitude } = weatherDto;
     try {
-      console.log(latitude);
-      console.log(longitude);
+      console.log('weather service latitude : ', latitude);
+      console.log('weatger servuce longitude : ', longitude);
 
       const weatherData = await axios.post(
         `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.WEATHER_API_KEY}&units=metric`

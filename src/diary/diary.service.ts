@@ -53,7 +53,7 @@ export class DiarysService {
       });
       console.log('외부의', diary);
       if (diary == '이미 오늘 작성한 일기가 있습니다') {
-        return returnMsg(false, "안됨");
+        return returnMsg(false, '안됨');
       }
       console.log('Created Diary');
       return diary;
@@ -134,6 +134,9 @@ export class DiarysService {
   }
 
   async saveImage(diary_id: number, source: string) {
+    console.log('id', diary_id);
+    console.log('source', source);
+
     await this.diaryRepository.saveImage(diary_id, source);
   }
 
@@ -146,7 +149,7 @@ export class DiarysService {
       const emotionURL = `http://192.168.0.223:9000/api/diaries/emotion/${content}`;
       const responseAI = await axios.get(emotionURL);
       const emotion = responseAI.data;
-      console.log(emotion);
+      console.log('service emotion:', emotion);
 
       return emotion;
     } catch (error) {

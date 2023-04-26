@@ -86,6 +86,8 @@ export class DiarysController {
     const diary = await this.diaryService.createDiary(createDiaryDto, req);
     // const source = await this.diaryService.createImage(diary.content);
     // await this.diaryService.saveImage(diary.diary_id, source);
+    const source = await this.diaryService.createImage(diary.content);
+    await this.diaryService.saveImage(diary.diary_id, source);
     return diary;
   }
 

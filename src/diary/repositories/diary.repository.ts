@@ -23,7 +23,7 @@ export class DiarysRepository {
         .createQueryBuilder('diary')
         .where(`diary.date LIKE :datePattern`, { datePattern: `${date}-%` })
         .andWhere(`diary.userId = :userId`, { userId })
-        .orderBy({ diary_id: 'ASC' })
+        .orderBy({ diary_id: 'DESC' })
         .getMany();
       console.log(query);
 
@@ -62,6 +62,7 @@ export class DiarysRepository {
   async createDiary({ title, content, emotion, weather, date, userId }): Promise<Diary | string> {
     try {
       // const user = await this.userRepository.findOneBy({ id: userId });
+      console.log('createDiary 1111');
 
       const findDiary = await this.verifyDiary(date, userId);
 
@@ -78,6 +79,7 @@ export class DiarysRepository {
         date,
         userId
       });
+      console.log(diary);
 
       return diary;
     } catch (error) {
