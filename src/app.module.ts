@@ -16,6 +16,8 @@ import { GoogleUser } from './google_user/entities/google_user.entity';
 import { WeatherModule } from './weather-mood/weather-mood.module';
 import { QnaModule } from './qna/qna.module';
 import { Qna } from './qna/entities/qna.entity';
+import { NftMarketController } from './nft-market/nft-market.controller';
+import { NftMarketModule } from './nft-market/nft-market.module';
 
 @Module({
   imports: [
@@ -41,9 +43,10 @@ import { Qna } from './qna/entities/qna.entity';
     WeatherModule,
     PictureModule,
     DomainModuleModule,
-    QnaModule
+    QnaModule,
+    NftMarketModule
   ],
-  controllers: [],
+  controllers: [NftMarketController],
   providers: []
 })
 export class AppModule implements NestModule {
