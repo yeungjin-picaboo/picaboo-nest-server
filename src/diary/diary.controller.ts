@@ -14,18 +14,15 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import axios from 'axios';
 import { Request } from 'express';
-import { clearConfigCache } from 'prettier';
-import { generate, retry } from 'rxjs';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
-import { GetWeatherDto } from 'src/weather-mood/dto/weahter.dto';
 import { WeatherService } from 'src/weather-mood/weather-mood.service';
 import { DiarysService } from './diary.service';
-import { CreateDiaryDto, DiaryDto, WeatherEmotion } from './dtos/create-diary.dto';
+import { CreateDiaryDto, CreateRate } from './dtos/create-diary.dto';
 import { UpdateDiaryDto } from './dtos/update-diary.dto';
 import { Diary } from './entities/diary.entity';
 import { Weather } from './dtos/create-diary.dto';
+import { returnMsg } from 'src/common/return.type';
 
 @Controller('api/diary')
 @ApiTags('Diary API')
@@ -36,6 +33,7 @@ export class DiarysController {
   // @ApiOperation({ summary: '감정,위도,경도', description: '위도경도감정' })
   // @ApiCreatedResponse({ description: '날씨 감정' })
   async getEmotionWeather(@Body() dto: Weather): Promise<any> {
+    console.log(dto);
     const emotion = await this.diaryService.getEmotion(dto.content);
     const weather = await this.weatherService.getWeather(dto.latitude, dto.longitude);
 
@@ -113,5 +111,13 @@ export class DiarysController {
     await this.diaryService.updateDiary(diaryId, req.user['userId'], updateDiaryDto);
     const source = await this.diaryService.createImage(updateDiaryDto.content); // 그림 생성
     await this.diaryService.saveImage(diaryId, source);
+  }
+
+  // @UseGuards(AccessTokenGuard)
+  @Post('/rating')
+  async rating(@Body() createRate: any) {
+    var a = await this.diaryService.saveRatingStar(createRate);
+    console.log(a);
+    return returnMsg(true, 'success');
   }
 }
