@@ -15,6 +15,9 @@ import { WeatherModule } from './weather-mood/weather-mood.module';
 import { QnaModule } from './qna/qna.module';
 import { Question } from './qna/entities/question.entity';
 import { Answer } from './qna/entities/answer.entity';
+import { UsersInfoModule } from './users-info/users-info.module';
+import { BasketModule } from './basket/basket.module';
+import { Basket } from './basket/entities/basket.entities';
 
 @Module({
   imports: [
@@ -28,7 +31,7 @@ import { Answer } from './qna/entities/answer.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Diary, createPicture, Question, Answer],
+      entities: [User, Diary, createPicture, Question, Answer, Basket],
       synchronize: true
       // logging: true,
     }),
@@ -38,7 +41,9 @@ import { Answer } from './qna/entities/answer.entity';
     WeatherModule,
     PictureModule,
     DomainModuleModule,
-    QnaModule
+    QnaModule,
+    UsersInfoModule,
+    BasketModule
   ],
   controllers: [],
   providers: []
