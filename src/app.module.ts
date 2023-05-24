@@ -18,6 +18,7 @@ import { QnaModule } from './qna/qna.module';
 import { Qna } from './qna/entities/qna.entity';
 import { NftMarketController } from './nft-market/nft-market.controller';
 import { NftMarketModule } from './nft-market/nft-market.module';
+import { Nft } from './nft-market/entities/nft.entity';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { NftMarketModule } from './nft-market/nft-market.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Diary, GoogleUser, createPicture, Qna],
+      entities: [User, Diary, GoogleUser, createPicture, Qna, Nft],
       // "entities: [__dirname + '/**/*.entity{.ts,.js}'],"
       synchronize: true
       // logging: true,
@@ -46,7 +47,7 @@ import { NftMarketModule } from './nft-market/nft-market.module';
     QnaModule,
     NftMarketModule
   ],
-  controllers: [NftMarketController],
+  controllers: [],
   providers: []
 })
 export class AppModule implements NestModule {
