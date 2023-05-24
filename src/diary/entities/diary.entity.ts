@@ -47,6 +47,10 @@ export class Diary extends BaseEntity {
   @IsString()
   source: string;
 
+  @Column('decimal', { precision: 5, scale: 2, nullable: true })
+  @IsNumber()
+  rate: number;
+
   @CreateDateColumn({ name: 'created_at', comment: '생성일' })
   @ApiProperty({ description: 'CreatedAt' })
   createdAt: Date;

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 import { Request } from 'express';
-import { CreateDiaryDto, CreateDiaryOutput, DiaryDto } from './dtos/create-diary.dto';
+import { CreateDiaryDto, CreateDiaryOutput, CreateRate, DiaryDto } from './dtos/create-diary.dto';
 import { DeleteDiaryOutput } from './dtos/delete-diary.dto';
 import { GetDiaryOutput } from './dtos/get-diary.dto';
 import { UpdateDiaryDto, UpdateDiaryOutput } from './dtos/update-diary.dto';
@@ -155,5 +155,12 @@ export class DiarysService {
     } catch (error) {
       return { error: 'Failed to get content' };
     }
+  }
+
+  async saveRatingStar(rating: CreateRate) {
+    try {
+      const { rate, diary_id } = rating;
+      return await this.diaryRepository.saverRating(rate, diary_id);
+    } catch (err) {}
   }
 }

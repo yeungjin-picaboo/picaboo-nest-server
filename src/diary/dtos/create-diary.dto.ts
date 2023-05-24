@@ -25,6 +25,8 @@ export class WeatherEmotion extends PickType(Diary, ['diary_id', 'content']) {} 
 
 export class CreateEmotionDto extends PickType(Diary, ['content', 'title']) {}
 
+export class CreateRate extends PickType(Diary, ['diary_id', 'rate']) {}
+
 export interface Weather {
   content: string;
   latitude: string;

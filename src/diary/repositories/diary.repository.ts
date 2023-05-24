@@ -25,7 +25,6 @@ export class DiarysRepository {
         .andWhere(`diary.userId = :userId`, { userId })
         .orderBy({ diary_id: 'DESC' })
         .getMany();
-      console.log(query);
 
       if (!query) {
         return 'You dont have diary';
@@ -129,7 +128,7 @@ export class DiarysRepository {
     // miniCalendar
     console.log(userId);
     const getUserDiary = await this.diaryRepository.findBy({ user: { id: userId } });
-    console.log('userDiary', getUserDiary);
+
     if (getUserDiary.length != 0) {
       // not empty
       let returnArr = [];
@@ -153,6 +152,17 @@ export class DiarysRepository {
     await this.diaryRepository.update(diary_id, { source });
   }
 
+  async saverRating(rate: number, diary_id: number) {
+    try {
+      console.log('rate : ', rate);
+      var a = await this.diaryRepository.update(diary_id, { rate });
+      console.log(a);
+      return 'true';
+    } catch (error) {
+      console.log(error);
+      return 'false';
+    }
+  }
   // async saveWeather(id: number, weather: string) {
   //   await this.diaryRepository.update(id, { weather });
   // }
