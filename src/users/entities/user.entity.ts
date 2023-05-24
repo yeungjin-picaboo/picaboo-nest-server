@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { IsEmail, IsString } from 'class-validator';
+import { Basket } from 'src/basket/entities/basket.entities';
 import { Answer } from 'src/qna/entities/answer.entity';
 import { Question } from 'src/qna/entities/question.entity';
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
@@ -34,4 +35,9 @@ export class User extends BaseEntity {
     cascade: true
   })
   answers: Answer[];
+
+  @OneToMany(() => Basket, basket => basket.userId, {
+    cascade: true
+  })
+  basket: Basket[];
 }
