@@ -10,19 +10,34 @@ export class UsersInfoRepository {
 
   async showUsersRating(userId) {
     try {
-      const highestRatingColumn = await this.diaryRepository
+      const subQuery = this.diaryRepository
         .createQueryBuilder('diary')
-        .select('diary.columnName')
-        .addSelect('MAX(diary.starRating)', 'maxRating')
-        .where('diary.userId = :userId', { userId: userId })
-        .groupBy('diary.mood')
+        .select('emotion, MAX(rate)', 'maxRate')
+        .groupBy('emotion')
+        .getQuery();
+      console.log(subQuery);
+      const query = await this.diaryRepository
+        .createQueryBuilder('diary')
+        // .select('diary.*')
+        .select([
+          'diary.diary_id',
+          'diary.emotion',
+          'diary.rate',
+          'diary.title',
+          'diary.content',
+          'diary.date',
+          'diary.source',
+          'diary.weather'
+        ])
+        .where('diary.userId = :userId', { userId })
+        .andWhere('(diary.emotion, diary.rate) IN (' + subQuery + ')')
         .getRawMany();
 
-      if (!highestRatingColumn) {
+      if (!query) {
         return 'You must make diary and rating';
       }
-      console.log(highestRatingColumn);
-      return highestRatingColumn;
+
+      return query;
     } catch (error) {}
   }
 }

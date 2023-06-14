@@ -7,8 +7,7 @@ export class UsersInfoService {
   constructor(private readonly usersInfoRepository: UsersInfoRepository) {}
 
   async showUsersRating(req: Request) {
-    console.log(req.user);
-    const userId = req.user['id'];
+    const userId = req.user['userId'];
     console.log(userId);
     return this.usersInfoRepository.showUsersRating(userId);
   }

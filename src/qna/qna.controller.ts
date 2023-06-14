@@ -7,7 +7,7 @@ import { GetCreateQuestionDto } from './dto/qna.dto';
 import { Request } from 'express';
 import { UpdateQuestionDto } from './dto/update-diary.dto';
 
-@Controller('question')
+@Controller('qna')
 export class QnaController {
   constructor(private qnaService: QnaService) {}
 

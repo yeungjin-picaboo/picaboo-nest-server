@@ -13,7 +13,7 @@ export class BasketRepository {
   async getAllBasket(userId: number): Promise<Array<Basket>> {
     try {
       const basketList = await this.basketRepository.find({ where: { userId } });
-
+      basketList.forEach(basket => delete basket.userId);
       return basketList;
     } catch (error) {
       return error.message;
@@ -34,7 +34,7 @@ export class BasketRepository {
             ...basket
           })
         );
-        return returnMsg(true, 'successfully created');
+        return returnMsg(true, 'Successfully created');
       } else {
         return returnMsg(false, 'failed to create basket');
       }
@@ -50,7 +50,7 @@ export class BasketRepository {
         userId
       });
       if (deleteBasket) {
-        return returnMsg(true, 'successfully deleted');
+        return returnMsg(true, 'Successfully deleted');
       } else {
         return returnMsg(false, 'failed to delete');
       }

@@ -65,4 +65,5 @@ export class Diary extends BaseEntity {
   })
   @JoinColumn()
   user: User;
+
 }
