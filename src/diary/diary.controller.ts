@@ -49,8 +49,8 @@ export class DiarysController {
 
   @UseGuards(AccessTokenGuard)
   @Get('/:id')
-  @ApiOperation({ summary: '일기 상세정보 API', description: '일기 상세정보 보기' })
-  @ApiCreatedResponse({ description: '내가 선택한 일기 상세정보를 봅니다.', type: Diary })
+  @ApiOperation({ summary: '日記詳細API', description: '日記の詳細を見る' })
+  @ApiCreatedResponse({ description: '選択した日記の詳細情報を表示します。', type: Diary })
   getDiary(@Param('id') diaryId: number, @Req() req: Request) {
     return this.diaryService.getDiary(diaryId, req.user['userId']);
   }
@@ -63,14 +63,11 @@ export class DiarysController {
     type: Diary
   })
   getAllDiary(
-    @Param('year') year: number,
+    @Param('year') year: string,
     @Param('month') month: string,
 
     @Req() req: Request
   ) {
-    // console.log('year', year);
-    // console.log('month', month);
-
     return this.diaryService.getAllDiary(req.user['userId'], year, month);
   }
 
@@ -80,10 +77,7 @@ export class DiarysController {
   @ApiCreatedResponse({ description: '일기를 작성합니다.', type: Diary })
   @UsePipes(ValidationPipe)
   async createDiary(@Body() createDiaryDto: CreateDiaryDto, @Req() req: Request) {
-    // console.log(createDiaryDto);
     const diary = await this.diaryService.createDiary(createDiaryDto, req);
-    // const source = await this.diaryService.createImage(diary.content);
-    // await this.diaryService.saveImage(diary.diary_id, source);
     const source = await this.diaryService.createImage(diary.content);
     await this.diaryService.saveImage(diary.diary_id, source);
     return diary;
@@ -113,7 +107,7 @@ export class DiarysController {
     await this.diaryService.saveImage(diaryId, source);
   }
 
-  // @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   @Post('/rating')
   async rating(@Body() createRate: any) {
     var a = await this.diaryService.saveRatingStar(createRate);

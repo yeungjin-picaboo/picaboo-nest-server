@@ -12,12 +12,11 @@ import { Diary } from '../entities/diary.entity';
 export class DiarysRepository {
   constructor(
     @InjectRepository(Diary)
-    private readonly diaryRepository: Repository<Diary>,
-    @InjectRepository(User)
-    private userRepository: Repository<User>
+    private readonly diaryRepository: Repository<Diary>
   ) {}
 
-  async getAllDiary(userId, date) {
+  // ユーザーの全ての日記を取得する
+  async getAllDiary(userId: number, date) {
     try {
       const query = await this.diaryRepository
         .createQueryBuilder('diary')
@@ -35,14 +34,8 @@ export class DiarysRepository {
     }
   }
 
-  /**
-   *
-   * @param diaryId
-   * @param userId
-   * @returns
-   */
-
-  async getDiary(diaryId, userId) {
+  // 特定の日記を取得する
+  async getDiary(diaryId: number, userId: number): Promise<Diary | string | boolean> {
     try {
       const diary = await this.diaryRepository.findOneBy({
         diary_id: diaryId,
@@ -58,16 +51,13 @@ export class DiarysRepository {
     }
   }
 
+  // 日記を作成する
   async createDiary({ title, content, emotion, weather, date, userId }): Promise<Diary | string> {
     try {
-      // const user = await this.userRepository.findOneBy({ id: userId });
-      console.log('createDiary 1111');
-
       const findDiary = await this.verifyDiary(date, userId);
 
-      console.log('다이어리는 : ', findDiary);
       if (findDiary.length == 1) {
-        return '이미 오늘 작성한 일기가 있습니다';
+        return 'すでに今日作成した日記があります。';
       }
 
       const diary = await this.diaryRepository.save({
@@ -78,22 +68,22 @@ export class DiarysRepository {
         date,
         userId
       });
-      console.log(diary);
 
       return diary;
     } catch (error) {
-      // return false;
       throw new Error('error');
     }
   }
 
+  // 日記が存在するかどうかを確認する
   async verifyDiary(date: string, userId) {
     const findDiary = await this.diaryRepository.find({ where: { user: { id: userId }, date } });
 
     return findDiary;
   }
 
-  async updateDiary(diary_id, updateDiaryDto: UpdateDiaryDto, userId) {
+  // 日記を更新する
+  async updateDiary(diary_id: number, updateDiaryDto: UpdateDiaryDto, userId: number) {
     try {
       const diary = await this.diaryRepository.update(
         { diary_id, userId },
@@ -108,6 +98,7 @@ export class DiarysRepository {
     }
   }
 
+  // 日記を削除する
   async deleteDiary({ diaryId, userId }) {
     const deleteDiary = await this.diaryRepository.delete({
       diary_id: diaryId,
@@ -119,51 +110,35 @@ export class DiarysRepository {
     return deleteDiary;
   }
 
-  // async getDiaryList({ userId }) {
-  //   // user의 전체 다이어리 리스트를 보여주면 됨.
-  //   const getDiaryList = await this.diaryRepository.findOne({});
-  // }
-
+  // ユーザーのカレンダーに表示する日記を取得する
   async getCalendarDiary(userId) {
-    // miniCalendar
-    console.log(userId);
     const getUserDiary = await this.diaryRepository.findBy({ user: { id: userId } });
 
     if (getUserDiary.length != 0) {
-      // not empty
       let returnArr = [];
-      let sortingArr = []; // 정렬해서 보내줄
       getUserDiary.map(e => {
-        // sortingArr.push(Number(e.date.split('-')[2]));
         returnArr.push({ id: e.diary_id, date: e.date });
       });
-      // returnArr.sort((a, b) => a.id - b.id);
 
-      // console.log(returnArr);
       return returnArr;
     } else {
-      return { ok: false, message: '작성한 글이 없습니다.' };
+      return { ok: false, message: '聞き込みがありまん。' };
     }
   }
 
+  // 画像を保存する
   async saveImage(diary_id: number, source: string) {
-    console.log('diary_id : ', diary_id);
-    console.log('source : ', source);
-    await this.diaryRepository.update(diary_id, { source });
+    this.diaryRepository.update(diary_id, { source });
   }
 
+  // 評価を保存する
   async saverRating(rate: number, diary_id: number) {
     try {
-      console.log('rate : ', rate);
-      var a = await this.diaryRepository.update(diary_id, { rate });
-      console.log(a);
+      await this.diaryRepository.update(diary_id, { rate });
       return 'true';
     } catch (error) {
       console.log(error);
       return 'false';
     }
   }
-  // async saveWeather(id: number, weather: string) {
-  //   await this.diaryRepository.update(id, { weather });
-  // }
 }

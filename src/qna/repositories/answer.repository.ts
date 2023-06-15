@@ -12,7 +12,7 @@ export class AnswerRepository {
     @InjectRepository(Question) private readonly QuestionRepositroy: Repository<Question>
   ) {}
 
-  async createAnswer(nickname, { content }, questionId) {
+  async createAnswer(nickname: string, { content }, questionId: number) {
     try {
       console.log('nickname :', nickname);
       console.log('content :', content);
@@ -41,9 +41,9 @@ export class AnswerRepository {
     }
   }
 
-  async showAnswer(questionId) {
+  async showAnswer(questionId: number) {
     try {
-      const answer = await this.AnswerRepository.find(questionId);
+      const answer = await this.AnswerRepository.findOneBy({ questionId });
       return answer;
     } catch (error) {
       return error;

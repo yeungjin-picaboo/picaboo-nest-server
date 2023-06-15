@@ -10,6 +10,7 @@ import { Answer } from '../entities/answer.entity';
 export class QnaRepository {
   constructor(@InjectRepository(Question) private readonly QnaRepository: Repository<Question>) {}
 
+  // Q&Aの全リストを取得する
   async getAllQna(page): Promise<Array<Question>> {
     const qna = await this.QnaRepository.find({
       skip: (page - 1) * 11,
@@ -22,6 +23,7 @@ export class QnaRepository {
     return qna;
   }
 
+  // 質問を作成する
   async createQuestion(
     title: string,
     content: string,
@@ -40,18 +42,19 @@ export class QnaRepository {
       if (!result) {
         return {
           ok: false,
-          error: 'Failed to create Question. Question not found'
+          error: '質問の作成に失敗しました。質問が見つかりません'
         };
       }
       return {
         ok: true,
-        message: 'Question successfully created'
+        message: '質問が正常に作成されました'
       };
     } catch (error) {
       console.log(error);
     }
   }
 
+  // 質問を削除する
   async deleteQuestion(question_id: number, nickname: string): Promise<string> {
     try {
       const result = await this.QnaRepository.delete({
@@ -60,62 +63,48 @@ export class QnaRepository {
       });
 
       if (result.affected == 1) {
-        return '삭제되었습니다';
+        return '削除されました';
       } else {
-        return '본인 글만 삭제할 수 있습니다.';
+        return 'ご自身の投稿だけ削除できます。';
       }
     } catch (error) {}
   }
-  /**
-   * 질문을 보여준다 비밀글일경우 컬럼 조회 후 nickname이 맞는경우 보여줌
-   * @param question_id
-   * @param nickname
-   * @returns question 객체
-   */
+
+  // 質問の詳細を表示する
   async showQuestion(question_id: number, nickname: string) {
     try {
       const question = await this.QnaRepository.findOneBy({
         id: question_id
       });
 
-      if (question.isPrivate && !this.verifyUser(nickname, nickname)) {
-        // 비밀글일 때
-        return '비밀글입니다 본인만 열람 가능합니다.';
+      if (question.isPrivate && !this.verifyUser(nickname, question.nickname)) {
+        return '非公開の質問です。本人のみが閲覧できます。';
       }
 
       return question;
     } catch (error) {
-      console.log('error Is :', error);
-      return '해당 글이 존재하지 않습니다';
+      console.log('error is :', error);
+      return '指定された質問が存在しません';
     }
   }
 
-  /**
-   * 작성글 수정한다.
-   * @param question_id
-   * @param nickname
-   * @param updateQuestion
-   * @returns
-   */
+  // 質問を更新する
   async updateQuestion(question_id: number, nickname: string, updateQuestion: UpdateQuestionDto) {
     try {
-      //
       const result = await this.QnaRepository.update({ id: question_id, nickname }, updateQuestion);
 
       if (result.affected == 0) {
-        return '본인이 작성한 글만 수정할 수 있습니다';
+        return 'ご自身が投稿した質問のみ更新できます';
       } else {
-        return '수정 성공!';
+        return '更新成功!';
       }
     } catch (error) {
       return error.message;
     }
   }
 
-  // verify user
+  // ユーザーを検証する
   verifyUser(nickname: string, question_nickname: string): boolean {
-    if (question_nickname == nickname) {
-      return true;
-    }
+    return question_nickname === nickname;
   }
 }

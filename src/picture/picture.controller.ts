@@ -8,8 +8,6 @@ export class PictureController {
 
   @Post('create')
   async createPicture(@Body() createPictureDto: CreatePictureDto): Promise<String> {
-    console.log('calling');
-    console.log(createPictureDto);
     return await this.createPictureService.createPicture(createPictureDto);
   }
 }

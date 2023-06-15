@@ -13,7 +13,8 @@ import { Diary } from './entities/diary.entity';
 export class DiarysService {
   constructor(private readonly diaryRepository: DiarysRepository) {}
 
-  async getAllDiary(userId, year, month) {
+  // すべての日記を取得するメソッド
+  async getAllDiary(userId: number, year: string, month: string) {
     const date = year + '-' + month;
     console.log(date);
 
@@ -28,6 +29,7 @@ export class DiarysService {
     }
   }
 
+  // 特定の日記を取得するメソッド
   async getDiary(diaryId, userId) {
     try {
       const result = await this.diaryRepository.getDiary(diaryId, userId);
@@ -40,13 +42,13 @@ export class DiarysService {
     }
   }
 
+  // 新しい日記を作成するメソッド
   async createDiary(
     createDiaryDto: CreateDiaryDto,
     req: Request
   ): Promise<Diary | { ok; message } | any> {
     try {
-      // console.log('user : ', req.user);
-      // console.log(createDiaryDto);
+      console.log(createDiaryDto);
       const diary = await this.diaryRepository.createDiary({
         ...createDiaryDto,
         userId: req.user['userId']
@@ -57,20 +59,14 @@ export class DiarysService {
       }
       console.log('Created Diary');
       return diary;
-      // return {
-      //   ok: true
-      // };
     } catch (error) {
       console.error(error);
 
       return error;
-      // return {
-      //   ok: false,
-      //   message: 'Failed create diary'
-      // };
     }
   }
 
+  // 日記を削除するメソッド
   async deleteDiary(diaryId: number, userId): Promise<DeleteDiaryOutput> {
     try {
       const result = await this.diaryRepository.deleteDiary({ diaryId, userId });
@@ -92,6 +88,7 @@ export class DiarysService {
     }
   }
 
+  // 日記を更新するメソッド
   async updateDiary(diaryId, userId, updateDiaryDto: UpdateDiaryDto): Promise<UpdateDiaryOutput> {
     try {
       const update = await this.diaryRepository.updateDiary(diaryId, updateDiaryDto, userId);
@@ -114,12 +111,14 @@ export class DiarysService {
     }
   }
 
+  // カレンダーで表示する日記を取得するメソッド
   async getCalendarDiary(userId) {
     try {
       return await this.diaryRepository.getCalendarDiary(userId);
     } catch (error) {}
   }
 
+  // 画像作成のためのメソッド
   async createImage(content: string) {
     try {
       const imageURL = `http://192.168.0.223:9000/api/diaries/picture/${content}`;
@@ -133,6 +132,7 @@ export class DiarysService {
     }
   }
 
+  // 画像を保存するメソッド
   async saveImage(diary_id: number, source: string) {
     console.log('id', diary_id);
     console.log('source', source);
@@ -140,10 +140,7 @@ export class DiarysService {
     await this.diaryRepository.saveImage(diary_id, source);
   }
 
-  // async saveWeather(id: number, weather: string) {
-  //   await this.diaryRepository.saveWeather(id, weather);
-  // }
-
+  // 感情分析結果を取得するメソッド
   async getEmotion(content: string) {
     try {
       const emotionURL = `http://192.168.0.223:9000/api/diaries/emotion/${content}`;
@@ -157,6 +154,7 @@ export class DiarysService {
     }
   }
 
+  // 星評価を保存するメソッド
   async saveRatingStar(rating: CreateRate) {
     try {
       const { rate, diary_id } = rating;

@@ -13,22 +13,22 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  @ApiOperation({ summary: '유저를 생성하는 API', description: '유저 생성' })
-  @ApiCreatedResponse({ description: '유저를 생성합니다', type: User })
+  @ApiOperation({ summary: 'ユーザーを生成するAPI', description: 'ユーザーを生成' })
+  @ApiCreatedResponse({ description: 'ユーザーを作成します', type: User })
   async signUp(@Body() createUserDto: CreateUserDto, @Res({ passthrough: true }) res: Response) {
     return await this.authService.signUp(createUserDto, res);
   }
 
   @Post('/login')
-  @ApiOperation({ summary: '로그인 하는 API', description: '로그인' })
-  @ApiCreatedResponse({ description: '로그인을 합니다.', type: User })
+  @ApiOperation({ summary: 'ログインをするAPI', description: 'ログイン' })
+  @ApiCreatedResponse({ description: 'ログインします。.', type: User })
   async signIn(@Body() data: AuthDto, @Res({ passthrough: true }) res: Response) {
     return await this.authService.signIn(data, res);
   }
 
   @UseGuards(AccessTokenGuard)
-  @ApiOperation({ summary: '로그아웃 하는 API', description: '로그아웃' })
-  @ApiCreatedResponse({ description: '로그아웃을 합니다.', type: User })
+  @ApiOperation({ summary: 'ログアウトするAPI', description: 'ログアウト' })
+  @ApiCreatedResponse({ description: 'ログアウトをします.', type: User })
   @Get('/logout')
   async logout(@Req() req: Request) {
     return await this.authService.logout(req.user['userId']);
@@ -36,7 +36,7 @@ export class AuthController {
 
   @UseGuards(AccessTokenGuard)
   @Get()
-  @ApiOperation({ summary: 'AccessToken 인증', description: 'AccessTokenGuard' })
+  @ApiOperation({ summary: 'AccessToken 認証', description: 'AccessTokenGuard' })
   user(@Req() req: Request) {
     return req.user; //useGuards
   }
