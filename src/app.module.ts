@@ -8,16 +8,14 @@ import { UsersModule } from './users/users.module';
 import { DiarysModule } from './diary/diary.module';
 import { Diary } from './diary/entities/diary.entity';
 import { User } from './users/entities/user.entity';
-import { PictureModule } from './picture/picture.module';
-import { createPicture } from './picture/entities/create_picture.entity';
 import { DomainModuleModule } from './domain-module/domain-module.module';
 import { WeatherModule } from './weather-mood/weather-mood.module';
 import { QnaModule } from './qna/qna.module';
 import { Question } from './qna/entities/question.entity';
-import { Answer } from './qna/entities/answer.entity';
 import { UsersInfoModule } from './users-info/users-info.module';
 import { BasketModule } from './basket/basket.module';
 import { Basket } from './basket/entities/basket.entities';
+import { Answer } from './qna/entities/answer.entity';
 
 @Module({
   imports: [
@@ -31,7 +29,7 @@ import { Basket } from './basket/entities/basket.entities';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Diary, createPicture, Question, Answer, Basket],
+      entities: [User, Diary, Question, Answer, Basket],
       synchronize: true
       // logging: true,
     }),
@@ -39,7 +37,6 @@ import { Basket } from './basket/entities/basket.entities';
     UsersModule,
     DiarysModule,
     WeatherModule,
-    PictureModule,
     DomainModuleModule,
     QnaModule,
     UsersInfoModule,

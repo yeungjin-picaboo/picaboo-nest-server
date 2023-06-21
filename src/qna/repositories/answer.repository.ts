@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Answer } from '../entities/answer.entity';
 import { returnMsg } from 'src/common/return.type';
 import { Question } from '../entities/question.entity';
+import { Answer } from '../entities/answer.entity';
 
 @Injectable()
 export class AnswerRepository {
@@ -24,11 +24,6 @@ export class AnswerRepository {
         content
       });
       const result = await this.AnswerRepository.save(create);
-
-      const question = await this.QuestionRepositroy.update(
-        { id: questionId },
-        { answerId: create.id }
-      );
 
       if (!result) {
         return returnMsg(false, 'failed to create answer');

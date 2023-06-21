@@ -4,7 +4,6 @@ import { Question } from '../entities/question.entity';
 import { Repository } from 'typeorm';
 import { CreateDiaryOutput } from 'src/diary/dtos/create-diary.dto';
 import { UpdateQuestionDto } from '../dto/update-diary.dto';
-import { Answer } from '../entities/answer.entity';
 
 @Injectable()
 export class QnaRepository {

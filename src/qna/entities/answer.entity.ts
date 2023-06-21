@@ -1,10 +1,14 @@
-import { IsBoolean, IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
@@ -20,12 +24,16 @@ export class Answer extends BaseEntity {
   content: string;
 
   @Column({ nullable: false })
+  @ManyToOne(() => User, user => user.nickname)
   @IsString()
   nickname: string;
 
   @Column({ nullable: false })
+  @OneToOne(() => Question, question => question.id, {
+    cascade: true
+  })
+  @JoinColumn({ name: 'id', referencedColumnName: 'id' })
   @IsNumber()
-  @OneToOne(() => Question, question => question.id)
   questionId: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })

@@ -5,12 +5,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
-import { Answer } from './answer.entity';
 
 @Entity()
 export class Question extends BaseEntity {
@@ -30,13 +27,9 @@ export class Question extends BaseEntity {
   isPrivate: boolean;
 
   @Column()
+  @ManyToOne(() => User, user => user.nickname)
   @IsString()
   nickname: string;
-
-  @Column({ nullable: true })
-  @OneToOne(() => Answer, answer => answer.id)
-  @IsNumber()
-  answerId: number;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
   createdAt: Date;
